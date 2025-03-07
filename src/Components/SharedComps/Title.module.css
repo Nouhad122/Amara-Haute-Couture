@@ -1,0 +1,14 @@
+.title-container{
+    text-align: center;
+    padding: 2rem;
+    line-height: 3.5rem;
+}
+.title-text{
+    font-size: 3rem;
+    font-family: var(--special-font-family);
+    font-weight: 400;
+}
+.subtitle-text{
+    font-size: 1.8rem;
+    color: var(--dark-grey-text-color);
+}

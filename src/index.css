@@ -1,0 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&family=Outfit:wght@100..900&family=Playwrite+IT+Moderna:wght@100..400&family=Poppins:wght@300;400;500;600;700&display=swap');
+:root{
+  --body-background-color: #fff;
+  --warm-pink-text-color: #e5cec4ff;
+  --burgundy-text-color: #9A3B3B;
+  --black-text-color: #000;
+  --white-text-color: #fff;
+  --light-grey-text-color: rgb(209, 206, 206);
+  --dark-grey-text-color: rgb(82, 81, 81);
+  --text-font-family: "Mulish", sans-serif;
+  --special-font-family: "Playwrite IT Moderna", cursive;;
+}

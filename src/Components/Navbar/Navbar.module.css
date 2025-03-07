@@ -1,0 +1,22 @@
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--warm-pink-text-color);
+    height: 12rem;
+  }
+  
+  .amara-logo {
+    width: 25rem;
+    height: auto;
+    object-fit: contain;
+  }
+  
+  @media (min-width: 768px) {
+    .navbar {
+      height: 10rem;
+    }
+    .amara-logo {
+      width: 20rem;
+    }
+  }
