@@ -1,9 +1,12 @@
 import React from 'react'
-import Slider from '../Components/ProductDetails/Slider'
+import SliderComp from '../Components/ProductDetails/Slider'
 
 const ProductDetails = () => {
   return (
-    <Slider />
+    <>
+    <SliderComp />
+    <h1>Hello</h1>
+    </>
   )
 }
 

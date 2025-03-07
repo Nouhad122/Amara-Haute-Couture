@@ -1,0 +1,173 @@
+.sliderContainer {
+    width: 100%;
+    margin: 0 auto;
+    position: relative;
+    overflow: hidden;
+  }
+  .sliderWrapper {
+    position: relative;
+    max-width: 50rem;
+    height: 82rem;
+    overflow: hidden;
+    margin: 0 auto;
+  }
+  .sliderContent {
+    width: 100%;
+    height: 100%;
+    position: relative;
+  }
+  .slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+  }
+  
+  .activeSlide {
+    opacity: 1;
+    visibility: visible;
+    z-index: 1;
+  }
+  .slideImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .videoContainer {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+  }
+  .videoElement {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    background-color: #000;
+  }
+  .playButton {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.6);
+    border: none;
+    width: 8rem;
+    height: 8rem;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 5;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+  }
+  
+  .playButton:hover {
+    background: var(--warm-pink-text-color);
+    transform: translate(-50%, -50%) scale(1.1);
+    box-shadow: 0 0 12px var(--burgundy-text-color);
+  }
+  .playIcon {
+    color: var(--white-text-color);
+    font-size: 3rem;
+    margin-left: 2px;
+  }
+  .navButton {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.628);
+    border: none;
+    width: 6rem;
+    height: 6rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    z-index: 3;
+    transition: all 0.3s ease;
+    color: var(--burgundy-text-color);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  }
+  .navButton:hover {
+    background: #fff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    transform: translateY(-50%) scale(1.1);
+  }
+  .prevButton {
+    left: 10px;
+  }
+  .nextButton {
+    right: 10px;
+  }
+  .thumbnailContainer{
+    display: none;
+  }
+  
+  @media (min-width: 768px) {
+    .thumbnailContainer{
+        width: 100%;
+        padding: .8rem 0;
+        display: flex;
+        justify-content: center;
+      }
+      
+      .thumbnailWrapper {
+        display: flex;
+        gap: 1.2rem;
+        padding: 0 1rem;
+        max-width: 100%;
+        justify-content: center;
+      }
+      .thumbnail {
+        position: relative;
+        width: 100%;
+        height: 20rem;
+        border: 2px solid transparent;
+        overflow: hidden;
+        cursor: pointer;
+        padding: 0;
+        transition: all 0.3s ease;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      }
+      
+      .thumbnail:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+      }
+      
+      .activeThumbnail {
+        border-color: var(--burgundy-text-color);
+        box-shadow: 0 1px 4px rgba(221, 51, 51, 0.4);
+      }
+      
+      .thumbnailImage {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    
+      .videoOverlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.3);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      
+      .smallPlayIcon {
+        width: 4rem;
+        height: 4rem;
+        filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.5));
+      }
+  }

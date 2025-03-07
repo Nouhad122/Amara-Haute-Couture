@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 const ProductCard = () => {
   return (
 <>
-    <Link to={'/'} className={classes['product-link']}>
+    <Link to={'/product/name'} className={classes['product-link']}>
     <div className={classes['product-card']}>
             <div className={classes['product-images']}>
                 <img className={classes['first-image']} src={productImage1} alt=''/>
