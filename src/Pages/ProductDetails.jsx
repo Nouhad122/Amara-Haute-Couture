@@ -1,12 +1,14 @@
 import React from 'react'
 import SliderComp from '../Components/ProductDetails/Slider'
+import Details from '../Components/ProductDetails/Details'
+import classes from './ProductDetails.module.css';
 
 const ProductDetails = () => {
   return (
-    <>
-    <SliderComp />
-    <h1>Hello</h1>
-    </>
+    <section className={classes['product-details-section']}>
+        <SliderComp />
+        <Details />
+    </section>
   )
 }
 

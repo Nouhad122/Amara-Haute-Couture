@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { FaChevronCircleLeft, FaChevronCircleRight, FaPlay } from "react-icons/fa";
+import { FaChevronCircleLeft, FaChevronCircleRight, FaPlay, FaSearchPlus, FaSearchMinus } from "react-icons/fa";
 import productImage from '../../assets/product-image-1.jpeg';
 import productVideo from '../../assets/trailer_G.mp4';
 import classes from './Slider.module.css';
@@ -7,7 +7,12 @@ import classes from './Slider.module.css';
 const Slider = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+  const [isImageZoomed, setIsImageZoomed] = useState(false);
+  const zoomLevel = 2; // Default zoom level
+  const [zoomPosition, setZoomPosition] = useState({ x: 50, y: 50 }); // Center by default
+  
   const videoRef = useRef(null);
+  const imageRef = useRef(null);
   
   // Sample slide content - replace with your actual content
   const slides = [
@@ -55,6 +60,10 @@ const Slider = () => {
 
   // Functions to control slider
   const nextSlide = () => {
+    if (isImageZoomed) {
+      resetZoom();
+    }
+    
     setCurrentSlide((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
     if (slides[currentSlide].type === 'video') {
       setIsVideoPlaying(false);
@@ -66,6 +75,10 @@ const Slider = () => {
   };
 
   const prevSlide = () => {
+    if (isImageZoomed) {
+      resetZoom();
+    }
+    
     setCurrentSlide((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
     if (slides[currentSlide].type === 'video') {
       setIsVideoPlaying(false);
@@ -78,6 +91,10 @@ const Slider = () => {
 
   const goToSlide = (index) => {
     if (currentSlide === index) return;
+    
+    if (isImageZoomed) {
+      resetZoom();
+    }
     
     if (slides[currentSlide].type === 'video') {
       setIsVideoPlaying(false);
@@ -92,6 +109,7 @@ const Slider = () => {
 
   const handlePlayVideo = () => {
     if (videoRef.current) {
+      videoRef.current.muted = true; // Ensure video stays muted
       videoRef.current.play();
       setIsVideoPlaying(true);
     }
@@ -102,6 +120,31 @@ const Slider = () => {
     if (videoRef.current) {
       videoRef.current.currentTime = 0;
     }
+  };
+
+  // Image zoom functions
+  const toggleZoom = () => {
+    setIsImageZoomed(prev => !prev);
+    if (!isImageZoomed) {
+      // When zooming in, start with center position
+      setZoomPosition({ x: 50, y: 50 });
+    }
+  };
+
+  const resetZoom = () => {
+    setIsImageZoomed(false);
+  };
+
+  const handleMouseMove = (e) => {
+    if (!isImageZoomed || !imageRef.current) return;
+    
+    // Calculate cursor position as percentage of image dimensions
+    const rect = imageRef.current.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    
+    // Update zoom position based on cursor
+    setZoomPosition({ x, y });
   };
 
   return (
@@ -115,11 +158,31 @@ const Slider = () => {
               className={`${classes.slide} ${index === currentSlide ? classes.activeSlide : ''}`}
             >
               {slide.type === 'image' ? (
-                <img 
-                  src={slide.src} 
-                  alt={slide.alt} 
-                  className={classes.slideImage}
-                />
+                <div 
+                  className={`${classes.imageContainer} ${isImageZoomed ? classes.zoomed : ''}`}
+                  onClick={toggleZoom}
+                  onMouseMove={handleMouseMove}
+                  onMouseLeave={resetZoom}
+                >
+                  <img 
+                    ref={index === currentSlide ? imageRef : null}
+                    src={slide.src} 
+                    alt={slide.alt} 
+                    className={classes.slideImage}
+                    style={
+                      isImageZoomed ? {
+                        transformOrigin: `${zoomPosition.x}% ${zoomPosition.y}%`,
+                        transform: `scale(${zoomLevel})`,
+                        cursor: 'zoom-out'
+                      } : {
+                        cursor: 'zoom-in'
+                      }
+                    }
+                  />
+                  <div className={classes.zoomIndicator}>
+                    {isImageZoomed ? <FaSearchMinus /> : <FaSearchPlus />}
+                  </div>
+                </div>
               ) : (
                 <div className={classes.videoContainer}>
                   <video 
@@ -134,7 +197,6 @@ const Slider = () => {
                     onEnded={handleVideoEnded}
                   >
                     <source src={productVideo} type="video/mp4" />
-                    Your browser does not support the video tag.
                   </video>
                   {!isVideoPlaying && (
                     <button 

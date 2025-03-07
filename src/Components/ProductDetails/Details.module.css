@@ -1,0 +1,11 @@
+.details-container{
+    font-size: 2rem;
+    padding: 2rem;
+    width: 100%;
+    max-width: 70rem;
+}
+@media (min-width: 768px){
+    .details-container{
+        width: 47%;
+}
+}

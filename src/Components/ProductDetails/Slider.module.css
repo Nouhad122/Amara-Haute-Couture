@@ -1,9 +1,9 @@
 .sliderContainer {
     width: 100%;
-    margin: 0 auto;
     position: relative;
     overflow: hidden;
   }
+  
   .sliderWrapper {
     position: relative;
     max-width: 50rem;
@@ -11,11 +11,13 @@
     overflow: hidden;
     margin: 0 auto;
   }
+  
   .sliderContent {
     width: 100%;
     height: 100%;
     position: relative;
   }
+  
   .slide {
     position: absolute;
     top: 0;
@@ -32,23 +34,73 @@
     visibility: visible;
     z-index: 1;
   }
+
+  .imageContainer {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    cursor: zoom-in;
+  }
+  
+  .zoomed {
+    cursor: zoom-out;
+    overflow: hidden;
+    z-index: 10;
+  }
+  
   .slideImage {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    transition: transform 0.1s ease-out;
   }
+  
+  .zoomed .slideImage {
+    will-change: transform;
+  }
+  
+  .zoomIndicator {
+    position: absolute;
+    bottom: 2rem;
+    right: 2rem;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: var(--white-text-color);
+    width: 5rem;
+    height: 5rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.7;
+    transition: opacity 0.3s;
+    pointer-events: none;
+    z-index: 6;
+  }
+  
+  .zoomIndicator svg {
+    width: 2rem;
+    height: 2rem;
+  }
+  
+  .imageContainer:hover .zoomIndicator {
+    opacity: 1;
+  }
+  
   .videoContainer {
     position: relative;
     width: 100%;
     height: 100%;
     background-color: #000;
   }
+  
   .videoElement {
     width: 100%;
     height: 100%;
     object-fit: contain;
     background-color: #000;
   }
+  
   .playButton {
     position: absolute;
     top: 50%;
@@ -73,11 +125,13 @@
     transform: translate(-50%, -50%) scale(1.1);
     box-shadow: 0 0 12px var(--burgundy-text-color);
   }
+  
   .playIcon {
     color: var(--white-text-color);
     font-size: 3rem;
     margin-left: 2px;
   }
+  
   .navButton {
     position: absolute;
     top: 50%;
@@ -95,79 +149,104 @@
     color: var(--burgundy-text-color);
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
   }
+  
   .navButton:hover {
     background: #fff;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
     transform: translateY(-50%) scale(1.1);
   }
+  
   .prevButton {
     left: 10px;
   }
+  
   .nextButton {
     right: 10px;
   }
-  .thumbnailContainer{
+  
+  .thumbnailContainer {
     display: none;
   }
   
   @media (min-width: 768px) {
-    .thumbnailContainer{
-        width: 100%;
-        padding: .8rem 0;
-        display: flex;
-        justify-content: center;
-      }
-      
-      .thumbnailWrapper {
-        display: flex;
-        gap: 1.2rem;
-        padding: 0 1rem;
-        max-width: 100%;
-        justify-content: center;
-      }
-      .thumbnail {
-        position: relative;
-        width: 100%;
-        height: 20rem;
-        border: 2px solid transparent;
-        overflow: hidden;
-        cursor: pointer;
-        padding: 0;
-        transition: all 0.3s ease;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-      }
-      
-      .thumbnail:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
-      }
-      
-      .activeThumbnail {
-        border-color: var(--burgundy-text-color);
-        box-shadow: 0 1px 4px rgba(221, 51, 51, 0.4);
-      }
-      
-      .thumbnailImage {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-      }
+    .sliderContainer {
+      width: 50%;
+      max-width: 55rem;
+      margin: 0 0;
+    }
     
-      .videoOverlay {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.3);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-      
-      .smallPlayIcon {
-        width: 4rem;
-        height: 4rem;
-        filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.5));
-      }
+    .sliderWrapper {
+      margin: 0 0;
+      max-width: 55rem;
+    }
+    
+    /* Adjust zoom indicator size for larger screens */
+    .zoomIndicator {
+      width: 6rem;
+      height: 6rem;
+    }
+    
+    .zoomIndicator svg {
+      width: 3rem;
+      height: 3rem;
+    }
+    
+    .thumbnailContainer {
+      width: 100%;
+      padding: .8rem 0;
+      display: flex;
+    }
+    
+    .thumbnailWrapper {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.2rem;
+      max-width: 100%;
+    }
+    
+    .thumbnail {
+      position: relative;
+      width: 15rem;
+      height: 20rem;
+      border: 2px solid transparent;
+      overflow: hidden;
+      cursor: pointer;
+      padding: 0;
+      transition: all 0.3s ease;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+    
+    .thumbnail:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+    }
+    
+    .activeThumbnail {
+      border-color: var(--burgundy-text-color);
+      box-shadow: 0 1px 4px rgba(221, 51, 51, 0.4);
+    }
+    
+    .thumbnailImage {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .videoOverlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.3);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .smallPlayIcon {
+      width: 4rem;
+      height: 4rem;
+      filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.5));
+    }
   }
