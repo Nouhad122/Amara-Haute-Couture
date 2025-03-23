@@ -1,0 +1,120 @@
+.details-container {
+  margin-top: 2rem;
+  padding: 2rem;
+  width: 100%;
+  max-width: 70rem;
+  font-family: 'Arial', sans-serif;
+  color: #333;
+}
+
+.title {
+  font-size: 3.8rem;
+  color: #1a1a1a;
+  font-weight: 400;
+  text-align: center;
+  font-family: var(--special-font-family);
+}
+
+.price {
+  margin: 1rem 0;
+  padding: 1.5rem 0;
+  border-bottom: 1px solid #eee;
+  text-align: center;
+}
+
+.price-amount {
+  font-size: 2.7rem;
+  font-weight: 400;
+  color: #2c3e50;
+  margin-right: 2rem;
+}
+
+.price-shipping {
+  font-size: 1.9rem;
+  color: #27ae60;
+  font-weight: 500;
+}
+
+.description {
+  margin: 3rem 0;
+}
+
+.description h2 {
+  font-size: 2.4rem;
+  margin-bottom: 1.5rem;
+  color: #2c3e50;
+}
+
+.description p {
+  font-size: 2.1rem;
+  line-height: 1.8;
+  color: #666;
+}
+
+.sizes {
+  margin: 3rem 0;
+}
+
+.sizes h2 {
+  font-size: 2.4rem;
+  margin-bottom: 1.5rem;
+  color: #2c3e50;
+}
+
+.size-options {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.size-btn {
+  padding: 1.2rem 2rem;
+  border: 2px solid #ddd;
+  background: none;
+  border-radius: 4px;
+  font-size: 1.8rem;
+}
+
+.additional {
+  margin-top: 3rem;
+  padding-top: 3rem;
+  border-top: 1px solid #eee;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(30rem, 1fr));
+  gap: 3rem;
+}
+
+.info-item h3 {
+  font-size: 2.2rem;
+  color: #2c3e50;
+  margin-bottom: 1rem;
+}
+
+.info-item p {
+  font-size: 1.9rem;
+  color: #666;
+}
+
+@media (min-width: 768px) {
+  .details-container {
+    width: 47%;
+    margin-top: 0;
+    padding: 0;
+  }
+
+  .title {
+    text-align: start;
+  }
+
+  .price {
+    text-align: start;
+  }
+
+  .price-amount {
+    font-size: 2.4rem;
+  }
+
+  .description p {
+    font-size: 2rem;
+  }
+}
