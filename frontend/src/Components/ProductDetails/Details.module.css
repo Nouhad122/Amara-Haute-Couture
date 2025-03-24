@@ -4,12 +4,10 @@
   width: 100%;
   max-width: 70rem;
   font-family: 'Arial', sans-serif;
-  color: #333;
 }
 
 .title {
   font-size: 3.8rem;
-  color: #1a1a1a;
   font-weight: 400;
   text-align: center;
   font-family: var(--special-font-family);
@@ -25,7 +23,6 @@
 .price-amount {
   font-size: 2.7rem;
   font-weight: 400;
-  color: #2c3e50;
   margin-right: 2rem;
 }
 
@@ -42,7 +39,6 @@
 .description h2 {
   font-size: 2.4rem;
   margin-bottom: 1.5rem;
-  color: #2c3e50;
 }
 
 .description p {
@@ -58,7 +54,6 @@
 .sizes h2 {
   font-size: 2.4rem;
   margin-bottom: 1.5rem;
-  color: #2c3e50;
 }
 
 .size-options {
@@ -86,7 +81,6 @@
 
 .info-item h3 {
   font-size: 2.2rem;
-  color: #2c3e50;
   margin-bottom: 1rem;
 }
 

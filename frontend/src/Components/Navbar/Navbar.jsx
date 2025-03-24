@@ -13,6 +13,12 @@ const Navbar = () => {
         alt='Amara haute couture logo'
       />
       </NavLink>
+
+      <div className={classes['navbar-links']}> 
+        <NavLink to={`/admin`}>
+          <button className={classes['link-btn']}>Admin Pannel</button>
+        </NavLink>
+      </div>
     </nav>
   )
 }

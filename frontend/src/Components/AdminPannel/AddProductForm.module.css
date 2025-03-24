@@ -1,0 +1,142 @@
+.container {
+  display: flex;
+  align-items: start;
+  min-height: 100vh;
+  padding: 0 1.5rem 3rem 1.5rem;
+}
+
+.product-form {
+  width: 100%;
+  max-width: 90vw;
+  padding: 3rem;
+}
+
+.product-form h2 {
+  font-size: 3.2rem;
+  margin-bottom: 3rem;
+  font-family: var(--special-font-family);
+  font-weight: 400;
+}
+
+.form-group {
+  margin-bottom: 3rem;
+}
+
+.form-group label {
+  display: block;
+  font-size: 1.8rem;
+  margin-bottom: 0.8rem;
+  font-weight: 500;
+}
+
+.form-group input[type="text"],
+.form-group input[type="number"],
+.form-group textarea {
+  width: 100%;
+  padding: 1.2rem;
+  border: 0.1rem solid #ddd;
+  font-size: 1.8rem;
+  transition: all 0.3s ease;
+  max-width: 100%;
+  background-color: rgba(118, 60, 60, 0.034);
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--burgundy-text-color);
+  box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.sizes-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  padding: 1rem 0;
+}
+
+.size-checkbox {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.size-checkbox input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.size-checkbox label {
+  padding: 1.2rem 2.4rem;
+  background-color: #f8f9fa;
+  border: 0.2rem solid #ddd;
+  border-radius: 0.6rem;
+  cursor: pointer;
+  font-size: 1.6rem;
+  transition: all 0.3s ease;
+  margin: 0;
+}
+
+.size-checkbox input[type="checkbox"]:checked + label {
+  background-color: var(--burgundy-text-color);
+  border-color: var(--burgundy-text-color);
+  color: white;
+}
+
+.size-checkbox label:hover {
+  border-color: var(--burgundy-text-color);
+}
+
+.form-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 2rem 0;
+}
+
+.form-checkbox input[type="checkbox"] {
+  width: 2rem;
+  height: 2rem;
+  cursor: pointer;
+}
+
+.form-checkbox label {
+  font-size: 1.8rem;
+  cursor: pointer;
+}
+.submit-btn:hover{
+    color: var(--burgundy-text-color);
+}
+.error-message{
+    color: red;
+    font-size: 1.5rem;
+    font-weight: 500;
+    margin-top: 1.2rem;
+}
+/* Responsive Design */
+@media (max-width: 768px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .product-form {
+    padding: 2rem;
+  }
+  
+  .sizes-group {
+    gap: 1rem;
+  }
+  
+  .size-checkbox label {
+    padding: 1rem 2rem;
+  }
+}

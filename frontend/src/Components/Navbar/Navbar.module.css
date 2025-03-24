@@ -1,14 +1,28 @@
 .navbar {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     background-color: var(--warm-pink-text-color);
-    height: 8rem;
+    height: 10rem;
   }
-  
+  .navbar-links {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1rem;
+    width: 100%;
+  }
   .amara-logo {
     width: 18rem;
     height: auto;
     object-fit: contain;
   }
-  
+  .link-btn {
+    color: white;
+    border: none;
+    padding: 0.5rem 2rem;
+    cursor: pointer;
+    background-color: var(--burgundy-text-color);
+  }

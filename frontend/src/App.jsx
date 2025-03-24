@@ -4,7 +4,7 @@ import RootPage from './Pages/RootPage';
 import Home from './Pages/Home';
 import Shop from './Pages/Shop';
 import ProductDetails from './Pages/ProductDetails';
-
+import AdminPannel from './Pages/AdminPannel';
 function App() {
   const router = createBrowserRouter([
     {
@@ -13,7 +13,8 @@ function App() {
       children: [
         {index: true, element: <Home />},
         {path: 'shop', element: <Shop />},
-        {path: 'product/:name', element: <ProductDetails />}
+        {path: 'product/:name', element: <ProductDetails />},
+        {path: 'admin', element: <AdminPannel />}
       ]
     }
 ])
