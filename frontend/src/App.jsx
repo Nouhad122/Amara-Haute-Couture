@@ -13,7 +13,7 @@ function App() {
       children: [
         {index: true, element: <Home />},
         {path: 'products', element: <Shop />},
-        {path: 'product/:name', element: <ProductDetails />},
+        {path: 'products/:id/:name', element: <ProductDetails />},
         {path: 'admin', element: <AdminPannel />}
       ]
     }

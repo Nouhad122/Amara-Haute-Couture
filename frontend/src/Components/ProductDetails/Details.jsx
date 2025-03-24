@@ -1,26 +1,22 @@
 import React from 'react';
 import classes from './Details.module.css';
 
-const Details = () => {
-  const sizes = ['XS', 'S', 'M', 'L', 'XL'];
+const Details = ({product}) => {
+  const sizes = product.availableSizes;
 
   return (
     <div className={classes['details-container']}>
-      <h1 className={classes.title}>Elegant Evening Gown</h1>
+      <h1 className={classes.title}>{product.name}</h1>
       
       <div className={classes.price}>
-        <span className={classes['price-amount']}>$599.99</span>
-        <span className={classes['price-shipping']}>Free Shipping</span>
+        <span className={classes['price-amount']}>${product.currentPrice}</span>
+        <span className={classes['price-shipping']}>Shipping Included</span>
       </div>
 
       <div className={classes.description}>
         <h2>Product Description</h2>
         <p>
-          This stunning evening gown features delicate hand-embroidered details and 
-          premium silk fabric. Perfect for special occasions, the dress showcases 
-          elegant draping and a flattering silhouette that complements any figure. 
-          The intricate beadwork catches the light beautifully, making you shine 
-          at any formal event.
+          {product.description}
         </p>
       </div>
 

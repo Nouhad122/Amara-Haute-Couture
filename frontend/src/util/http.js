@@ -30,6 +30,19 @@ export const addProduct = async (productData) => {
     }
 
     const data = await response.json();
+
+    return data;
+}
+
+export const fetchProduct = async (id) => {
+    const response = await fetch(`http://localhost:3000/products/${id}`);
     
+    if(!response.ok){
+        const error = await response.json();
+        throw new Error(error.message || 'Failed to fetch product');
+    }
+
+    const data = await response.json();
+
     return data;
 }

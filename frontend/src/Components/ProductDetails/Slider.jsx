@@ -4,7 +4,7 @@ import productImage from '../../assets/product-image-1.jpeg';
 import productVideo from '../../assets/trailer_G.mp4';
 import classes from './Slider.module.css';
 
-const Slider = () => {
+const Slider = ({product}) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
   const [isImageZoomed, setIsImageZoomed] = useState(false);
@@ -19,9 +19,9 @@ const Slider = () => {
     { 
       id: 1, 
       type: 'image',
-      src: productImage,
+      src: product.imageUrl,
       alt: 'Slide 1',
-      thumbnail: productImage
+      thumbnail: product.imageUrl
     },
     { 
       id: 2, 

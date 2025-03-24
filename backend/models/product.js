@@ -16,6 +16,10 @@ const productSchema = new mongoose.Schema({
     oldPrice: {
         type: Number,
     },
+    category: {
+        type: String,
+        required: true,
+    },
     imageUrl: {
         type: String,
         required: true,

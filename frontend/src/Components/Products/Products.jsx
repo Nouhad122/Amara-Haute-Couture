@@ -5,17 +5,7 @@ import usePagination from '../../hooks/usePagination';
 import Pagination from '../SharedComps/Pagination';
 import { useQuery } from '@tanstack/react-query';
 import { fetchProducts } from '../../util/http';
-const Products = () => {
-  const { 
-    data: products, 
-    isLoading, 
-    isError,
-    error 
-  } = useQuery({
-    queryKey: ['products'],
-    queryFn: fetchProducts,
-    staleTime: 1000 * 60 * 60 // 1 hour
-  });
+const Products = ({products, isLoading, isError, error}) => {
 
   if (isLoading) {
     return (
@@ -33,13 +23,14 @@ const Products = () => {
     );
   }
 
-  if(products.length === 0){
+  if(!products || products.length === 0){
     return (
       <div className={classes['no-products']}>
         <p>No products found.</p>
       </div>
     )
   }
+  
 
   // const { pageCount, handlePageClick } = usePagination({
   //   items: targetedProducts,

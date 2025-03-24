@@ -6,6 +6,7 @@ router.post('/', async (req, res) => {
     try {
         const product = new Product({
             name: req.body.name,
+            category: req.body.category,
             description: req.body.description,
             currentPrice: req.body.currentPrice,
             oldPrice: req.body.oldPrice,

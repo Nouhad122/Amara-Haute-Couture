@@ -3,24 +3,31 @@ import classes from './AddProductForm.module.css'
 import Button from '../SharedComps/Button'
 import { useMutation } from '@tanstack/react-query'
 import { addProduct, queryClient } from '../../util/http'
-
+import { useNavigate } from 'react-router-dom';
 const AddProductForm = () => {
   const availableSizes = ['XS', 'S', 'M', 'L', 'XL'];
   const [errors, setErrors] = useState({});
-  const [formData, setFormData] = useState({
+  const initialFormState = {
     name: '',
+    category: '',
     description: '',
     currentPrice: '',
     oldPrice: '',
     imageUrl: '',
     sizes: [],
     bestSeller: false
-  });
-
+  };
+  
+  const [formData, setFormData] = useState(initialFormState);
+  const navigate = useNavigate();
+  
   const { mutate, isLoading, error } = useMutation({
     mutationFn: addProduct,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['products'] });
+      // Reset form to initial state
+      setFormData(initialFormState);
+      setErrors({});
     }
   });
 
@@ -62,6 +69,10 @@ const AddProductForm = () => {
     if (!formData.name.trim()) {
       newErrors.name = 'Product name is required';
     }
+
+    if (!formData.category.trim()) {
+      newErrors.category = 'Category is required';
+    }
     
     if (!formData.description.trim()) {
       newErrors.description = 'Description is required';
@@ -73,8 +84,8 @@ const AddProductForm = () => {
       newErrors.currentPrice = 'Price must be a positive number';
     }
 
-    if(isNaN(formData.oldPrice) || Number(formData.oldPrice) < 0){
-      newErrors.oldPrice = 'Old price must be a positive number or null';
+    if (formData.oldPrice && (isNaN(formData.oldPrice) || Number(formData.oldPrice) < 0)) {
+      newErrors.oldPrice = 'Old price must be a positive number or empty';
     }
     
     if (!formData.imageUrl.trim()) {
@@ -93,6 +104,7 @@ const AddProductForm = () => {
     event.preventDefault();
     if (validateForm()) {
       mutate(formData);
+      navigate('/admin');
       
       if(error){
         setErrors(prev => ({
@@ -101,21 +113,6 @@ const AddProductForm = () => {
         }));
         return;
       }
-      
-      if(!error && !isLoading) {
-        // Reset form
-        setFormData({
-          name: '',
-          description: '',
-          currentPrice: '',
-          oldPrice: '',
-          imageUrl: '',
-          sizes: [],
-          bestSeller: false
-        });
-
-        setErrors({});
-      }
     }
   };
 
@@ -123,7 +120,7 @@ const AddProductForm = () => {
   if(isLoading) {
     return <p>Adding product...</p>;
   }
-  
+
   return (
     <div className={classes.container}>
       <form className={classes['product-form']} onSubmit={handleSubmit}>
@@ -142,6 +139,21 @@ const AddProductForm = () => {
           />
           {errors.name && <p className={classes['error-message']}>{errors.name}</p>}
         </div>
+
+        <div className={classes['form-group']}>
+          <label htmlFor="category">Category</label>
+          <input 
+            type="text" 
+            id="category" 
+            name="category" 
+            value={formData.category}
+            onChange={handleChange}
+            placeholder="Enter product category" 
+            className={errors.category ? classes['input-error'] : ''}
+          />
+          {errors.category && <p className={classes['error-message']}>{errors.category}</p>}
+        </div>
+
         
         <div className={classes['form-group']}>
           <label htmlFor="description">Description</label>
