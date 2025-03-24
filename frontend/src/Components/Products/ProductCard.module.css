@@ -106,3 +106,18 @@
         height: 85rem;
     }
 }
+
+.media-indicators {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    z-index: 12;
+}
+
+.more-media {
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 1.4rem;
+}

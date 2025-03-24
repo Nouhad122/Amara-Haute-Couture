@@ -4,13 +4,13 @@ import Products from '../Products/Products';
 import classes from './SameCategory.module.css';
 import { useQuery } from '@tanstack/react-query';
 import { fetchProducts } from '../../util/http';
-const SameCategory = ({category}) => {
+const SameCategory = ({category, productId}) => {
 
   const { data: products, isLoading, isError, error } = useQuery({
     queryKey: ['product'],
     queryFn: () => fetchProducts(),
     select: (data) => {
-      return data.filter(product => product.category.toLowerCase() === category.toLowerCase());
+      return data.filter(product => product.category.toLowerCase() === category.toLowerCase() && product._id !== productId);
     } 
   });
   return (

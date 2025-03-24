@@ -3,33 +3,100 @@ import classes from './AddProductForm.module.css'
 import Button from '../SharedComps/Button'
 import { useMutation } from '@tanstack/react-query'
 import { addProduct, queryClient } from '../../util/http'
-import { useNavigate } from 'react-router-dom';
+
 const AddProductForm = () => {
   const availableSizes = ['XS', 'S', 'M', 'L', 'XL'];
   const [errors, setErrors] = useState({});
+  const [selectedFiles, setSelectedFiles] = useState([]);
+  const [previewUrls, setPreviewUrls] = useState([]);
+  
   const initialFormState = {
     name: '',
     category: '',
     description: '',
     currentPrice: '',
     oldPrice: '',
-    imageUrl: '',
     sizes: [],
     bestSeller: false
   };
   
   const [formData, setFormData] = useState(initialFormState);
-  const navigate = useNavigate();
-  
+
   const { mutate, isLoading, error } = useMutation({
-    mutationFn: addProduct,
+    mutationFn: async (data) => {
+      try {
+        const formDataToSend = new FormData();
+        
+        // Append all form fields with proper type conversion
+        formDataToSend.append('name', data.name);
+        formDataToSend.append('category', data.category);
+        formDataToSend.append('description', data.description);
+        formDataToSend.append('currentPrice', Number(data.currentPrice).toString());
+        formDataToSend.append('oldPrice', data.oldPrice ? Number(data.oldPrice).toString() : '0');
+        
+        // Convert sizes array to JSON string and verify it's valid
+        const sizesJson = JSON.stringify(data.sizes || []);
+        console.log('Sizes being sent:', sizesJson);
+        formDataToSend.append('availableSizes', sizesJson);
+        
+        formDataToSend.append('bestSeller', data.bestSeller.toString());
+        
+        // Append all files
+        if (selectedFiles.length > 0) {
+          selectedFiles.forEach(file => {
+            formDataToSend.append('files', file);
+          });
+        }
+
+        // Debug log
+        console.log('Form data being sent:');
+        for (let [key, value] of formDataToSend.entries()) {
+          console.log(`${key}: ${value instanceof File ? value.name : value}`);
+        }
+        
+        return addProduct(formDataToSend);
+      } catch (err) {
+        console.error('Error preparing form data:', err);
+        throw err;
+      }
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['products'] });
       // Reset form to initial state
       setFormData(initialFormState);
+      setSelectedFiles([]);
+      setPreviewUrls([]);
       setErrors({});
+    },
+    onError: (error) => {
+      console.error('Mutation error:', error);
+      setErrors(prev => ({
+        ...prev,
+        submit: error.message || 'Failed to add product. Please try again.'
+      }));
     }
   });
+
+  const handleFileChange = (e) => {
+    const files = Array.from(e.target.files);
+    setSelectedFiles(prevFiles => [...prevFiles, ...files]);
+    
+    // Create preview URLs for images
+    files.forEach(file => {
+      if (file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setPreviewUrls(prev => [...prev, reader.result]);
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+  };
+
+  const removeFile = (index) => {
+    setSelectedFiles(prev => prev.filter((_, i) => i !== index));
+    setPreviewUrls(prev => prev.filter((_, i) => i !== index));
+  };
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -41,7 +108,7 @@ const AddProductForm = () => {
           [name]: checked
         }));
       } else if (name === 'sizes') {
-        const updatedSizes = [...formData.sizes];
+        const updatedSizes = [...(formData.sizes || [])];
         if (checked) {
           updatedSizes.push(value);
         } else {
@@ -88,8 +155,8 @@ const AddProductForm = () => {
       newErrors.oldPrice = 'Old price must be a positive number or empty';
     }
     
-    if (!formData.imageUrl.trim()) {
-      newErrors.imageUrl = 'Image URL is required';
+    if (selectedFiles.length === 0) {
+      newErrors.files = 'At least one image or video is required';
     }
     
     if (formData.sizes.length === 0) {
@@ -104,15 +171,6 @@ const AddProductForm = () => {
     event.preventDefault();
     if (validateForm()) {
       mutate(formData);
-      navigate('/admin');
-      
-      if(error){
-        setErrors(prev => ({
-          ...prev,
-          submit: error.message || 'Failed to add product. Please try again.'
-        }));
-        return;
-      }
     }
   };
 
@@ -201,17 +259,45 @@ const AddProductForm = () => {
         </div>
         
         <div className={classes['form-group']}>
-          <label htmlFor="imageUrl">Image URL</label>
+          <label htmlFor="files">Product Images & Videos</label>
           <input 
-            type="text" 
-            id="imageUrl" 
-            name="imageUrl" 
-            value={formData.imageUrl}
-            onChange={handleChange}
-            placeholder="Enter image URL" 
-            className={errors.imageUrl ? classes['input-error'] : ''}
+            type="file"
+            id="files"
+            name="files"
+            onChange={handleFileChange}
+            multiple
+            accept="image/*,video/*"
+            className={errors.files ? classes['input-error'] : ''}
           />
-          {errors.imageUrl && <p className={classes['error-message']}>{errors.imageUrl}</p>}
+          {errors.files && <p className={classes['error-message']}>{errors.files}</p>}
+          
+          {/* Preview section */}
+          {selectedFiles.length > 0 && (
+            <div className={classes['preview-container']}>
+              {selectedFiles.map((file, index) => (
+                <div key={index} className={classes['preview-item']}>
+                  {file.type.startsWith('image/') ? (
+                    <img 
+                      src={previewUrls[index]} 
+                      alt={`Preview ${index + 1}`} 
+                      className={classes['preview-image']}
+                    />
+                  ) : (
+                    <div className={classes['video-placeholder']}>
+                      <span>{file.name}</span>
+                    </div>
+                  )}
+                  <button 
+                    type="button" 
+                    onClick={() => removeFile(index)}
+                    className={classes['remove-file']}
+                  >
+                    ×
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
         
         <div className={classes['form-group']}>

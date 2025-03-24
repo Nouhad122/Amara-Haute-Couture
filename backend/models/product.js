@@ -1,5 +1,17 @@
 const mongoose = require('mongoose');
 
+const mediaSchema = new mongoose.Schema({
+    url: {
+        type: String,
+        required: true,
+    },
+    type: {
+        type: String,
+        required: true,
+        enum: ['image', 'video']
+    }
+});
+
 const productSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -20,9 +32,10 @@ const productSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    imageUrl: {
-        type: String,
+    media: {
+        type: [mediaSchema],
         required: true,
+        validate: [array => array.length > 0, 'At least one media file is required']
     },
     availableSizes: {
         type: [String],

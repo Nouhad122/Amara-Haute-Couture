@@ -33,7 +33,7 @@ const ProductDetails = () => {
           <Slider product={product} />
           <Details product={product} />
       </section>
-      <SameCategory category={product.category}/>
+      <SameCategory category={product.category} productId={product._id}/>
     </>
   )
 }
