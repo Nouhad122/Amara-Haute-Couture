@@ -6,6 +6,9 @@
     height: 88rem;
     background-color: rgba(237, 237, 237, 0.196);
 }
+.extra-height{
+    height: 92rem !important;
+}
 .product-images{
     position: relative;
     background-color: var(--body-background-color);
@@ -98,6 +101,32 @@
 }
 .product-card:hover .first-image{
     opacity: 0;
+}
+.product-btns{
+    display: flex;
+    gap: 2rem;
+    margin-top: 2rem;
+}
+.edit-btn, .delete-btn{
+    font-size: 1.8rem;
+    padding: 1rem 4rem;
+    transition: all .3s ease;
+}
+.edit-btn:hover, .delete-btn:hover{
+    border: solid 1px transparent;
+    letter-spacing: .1rem;
+}
+.edit-btn{
+    background-color: rgb(82, 128, 82);
+}
+.edit-btn:hover{
+    background-color: rgb(61, 185, 61);
+}
+.delete-btn{
+    background-color: rgb(185, 61, 61);
+}
+.delete-btn:hover{
+    background-color: rgb(231, 20, 20);
 }
 
 @media screen and (min-width: 768px) {

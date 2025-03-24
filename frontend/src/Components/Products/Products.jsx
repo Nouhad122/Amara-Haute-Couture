@@ -5,7 +5,7 @@ import usePagination from '../../hooks/usePagination';
 import Pagination from '../SharedComps/Pagination';
 import { useQuery } from '@tanstack/react-query';
 import { fetchProducts } from '../../util/http';
-const Products = ({products, isLoading, isError, error}) => {
+const Products = ({products, isLoading, isError, error, isAdmin}) => {
 
   if (isLoading) {
     return (
@@ -46,6 +46,7 @@ const Products = ({products, isLoading, isError, error}) => {
           <ProductCard 
             key={product._id}
             product={product}
+            isAdmin={isAdmin}
           />
         ))
       }

@@ -13,7 +13,7 @@ const AdminProducts = () => {
       <Title 
         title="Admin Products" 
       />
-      <Products products={products} isLoading={isLoading} isError={isError} error={error} />
+      <Products products={products} isLoading={isLoading} isError={isError} error={error} isAdmin />
     </div>
   )
 }
