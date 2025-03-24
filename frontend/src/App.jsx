@@ -12,7 +12,7 @@ function App() {
       element: <RootPage />,
       children: [
         {index: true, element: <Home />},
-        {path: 'shop', element: <Shop />},
+        {path: 'products', element: <Shop />},
         {path: 'product/:name', element: <ProductDetails />},
         {path: 'admin', element: <AdminPannel />}
       ]

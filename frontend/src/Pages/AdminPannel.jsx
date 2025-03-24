@@ -5,7 +5,9 @@ import Title from '../Components/SharedComps/Title'
 const AdminPannel = () => {
   return (
     <div>
-      <Title title="Admin Pannel" />
+      <Title
+        title="Admin Pannel"
+        subtitle="Only admins can add, edit and delete all products"/>
       <AddProductForm />
       <AdminProducts />
     </div>

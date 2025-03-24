@@ -12,7 +12,7 @@ server.use(cors());
 server.use('/admin', adminRoutes);
 server.use(shopRoutes);
 
-mongoose.connect('mongodb+srv://nouhadalhallab122:U30eYfNYXwRZJQGz@amara-cluster.wqmrg.mongodb.net/?retryWrites=true&w=majority&appName=Amara-Cluster')
+mongoose.connect('mongodb+srv://nouhadalhallab122:U30eYfNYXwRZJQGz@amara-cluster.wqmrg.mongodb.net/shop?retryWrites=true&w=majority&appName=Amara-Cluster')
 .then(() =>{
     server.listen(3000);
 })

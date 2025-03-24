@@ -4,3 +4,20 @@
     max-width: 150rem;
     min-height: 100vh;
 }
+
+.loading-container,
+.error-container,
+.no-products {
+  text-align: center;
+  padding: 4rem;
+  font-size: 2rem;
+  color: #333;
+}
+
+.error-container {
+  color: #dc3545;
+}
+
+.no-products {
+  color: #666;
+}

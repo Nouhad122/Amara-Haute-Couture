@@ -1,9 +1,14 @@
 import React from 'react'
+import Products from '../Products/Products';
+import Title from '../SharedComps/Title';
 
 const AdminProducts = () => {
   return (
     <div>
-      <h1>Admin Products</h1>
+      <Title 
+        title="Admin Products" 
+      />
+      <Products />
     </div>
   )
 }

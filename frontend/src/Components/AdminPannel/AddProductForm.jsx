@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import classes from './AddProductForm.module.css'
 import Button from '../SharedComps/Button'
+import { useMutation } from '@tanstack/react-query'
+import { addProduct, queryClient } from '../../util/http'
 
 const AddProductForm = () => {
   const availableSizes = ['XS', 'S', 'M', 'L', 'XL'];
@@ -13,6 +15,13 @@ const AddProductForm = () => {
     imageUrl: '',
     sizes: [],
     bestSeller: false
+  });
+
+  const { mutate, isLoading, error } = useMutation({
+    mutationFn: addProduct,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['products'] });
+    }
   });
 
   const handleChange = (e) => {
@@ -63,6 +72,10 @@ const AddProductForm = () => {
     } else if (isNaN(formData.currentPrice) || Number(formData.currentPrice) <= 0) {
       newErrors.currentPrice = 'Price must be a positive number';
     }
+
+    if(isNaN(formData.oldPrice) || Number(formData.oldPrice) < 0){
+      newErrors.oldPrice = 'Old price must be a positive number or null';
+    }
     
     if (!formData.imageUrl.trim()) {
       newErrors.imageUrl = 'Image URL is required';
@@ -76,15 +89,41 @@ const AddProductForm = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    
     if (validateForm()) {
-      console.log('Form submitted successfully:', formData);
-      // Here you would typically send the data to your backend
+      mutate(formData);
+      
+      if(error){
+        setErrors(prev => ({
+          ...prev,
+          submit: error.message || 'Failed to add product. Please try again.'
+        }));
+        return;
+      }
+      
+      if(!error && !isLoading) {
+        // Reset form
+        setFormData({
+          name: '',
+          description: '',
+          currentPrice: '',
+          oldPrice: '',
+          imageUrl: '',
+          sizes: [],
+          bestSeller: false
+        });
+
+        setErrors({});
+      }
     }
   };
 
+  // Show loading state in the component render
+  if(isLoading) {
+    return <p>Adding product...</p>;
+  }
+  
   return (
     <div className={classes.container}>
       <form className={classes['product-form']} onSubmit={handleSubmit}>
@@ -145,6 +184,7 @@ const AddProductForm = () => {
               placeholder="0.00" 
               step="0.01" 
             />
+            {errors.oldPrice && <p className={classes['error-message']}>{errors.oldPrice}</p>}
           </div>
         </div>
         
@@ -193,7 +233,15 @@ const AddProductForm = () => {
           <label htmlFor="bestSeller">Mark as Best Seller</label>
         </div>
         
-        <Button type="submit" className={classes['submit-btn']}>Add Product</Button>
+        {errors.submit && (
+          <div className={classes['submit-error']}>
+            {errors.submit}
+          </div>
+        )}
+        
+        <Button type="submit" className={classes['submit-btn']} disabled={isLoading}>
+          {isLoading ? 'Adding...' : 'Add Product'}
+        </Button>
       </form>
     </div>
   )
