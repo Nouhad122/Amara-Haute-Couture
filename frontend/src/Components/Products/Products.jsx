@@ -1,11 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import classes from './Products.module.css';
 import ProductCard from './ProductCard';
 import usePagination from '../../hooks/usePagination';
 import Pagination from '../SharedComps/Pagination';
-import { useQuery } from '@tanstack/react-query';
-import { fetchProducts } from '../../util/http';
-const Products = ({products, isLoading, isError, error, isAdmin}) => {
+
+const Products = ({products, isLoading, isError, error, isAdmin, onEdit}) => {
+  const [currentPage, setCurrentPage] = useState(0);
+  const itemsPerPage = 15;
+
+  const { currentItems, pageCount, handlePageClick } = usePagination({
+    items: products || [],
+    itemsPerPage,
+    currentPage,
+    setCurrentPage
+  });
 
   if (isLoading) {
     return (
@@ -23,41 +31,36 @@ const Products = ({products, isLoading, isError, error, isAdmin}) => {
     );
   }
 
-  if(!products || products.length === 0){
+  if(!products || products.length === 0) {
     return (
       <div className={classes['no-products']}>
         <p>No products found.</p>
       </div>
-    )
+    );
   }
-  
 
-  // const { pageCount, handlePageClick } = usePagination({
-  //   items: targetedProducts,
-  //   itemsPerPage,
-  //   currentPage,
-  //   setCurrentPage
-  // });
-  
   return (
-    <section className={`${classes['products-section']} grid`}>
-      {
-        products.map(product =>(
+    <>
+      <section className={`${classes['products-section']} grid`}>
+        {currentItems.map(product => (
           <ProductCard 
             key={product._id}
             product={product}
             isAdmin={isAdmin}
+            onEdit={onEdit}
           />
-        ))
-      }
+        ))}
+      </section>
 
-      {/* <Pagination
+      {pageCount > 1 && (
+        <Pagination
           pageCount={pageCount}
           onPageChange={handlePageClick}
           currentPage={currentPage}
-      /> */}
-    </section>
-  )
-}
+        />
+      )}
+    </>
+  );
+};
 
-export default Products
+export default Products;

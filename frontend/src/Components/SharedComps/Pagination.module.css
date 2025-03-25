@@ -1,25 +1,26 @@
 .pagination {
     display: flex;
     list-style: none;
-    gap: 1rem;
+    gap: 2rem;
     justify-content: center;
     padding: 1.5rem;
+    font-size: 1.8rem;
   }
-  
   .page-link{
     text-decoration: none;
-    color: var(--white-font-color);
+    color: var(--burgundy-text-color);
     display: block;
-    padding: .3rem .7rem;
+    padding: .6rem 1.2rem;
     cursor: pointer;
-    border: solid 2px var(--light-red-color);
+    border: solid 2px var(--burgundy-text-color);
   }
   .prev-item, .next-item{
     display: none;
   }
   
-  .active {
-    background-color: var(--light-red-color);
+  .active .page-link {
+    background-color: var(--burgundy-text-color);
+    color: var(--white-text-color) !important;
   }
   
   .disabled {
@@ -32,4 +33,3 @@
       display: block;
     }
   }
-  

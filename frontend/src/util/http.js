@@ -64,7 +64,7 @@ export const fetchProduct = async (id) => {
     }
 }
 
-export const updateProduct = async ({ id, formData }) => {
+export const updateProduct = async (id, formData) => {
     try {
         const response = await fetch(`${BASE_URL}/admin/products/${id}`, {
             method: 'PATCH',

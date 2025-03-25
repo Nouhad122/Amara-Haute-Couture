@@ -1,9 +1,16 @@
 import React from 'react';
 import classes from './ProductCard.module.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Button from '../SharedComps/Button';
 
-const ProductCard = ({ product, isAdmin }) => {
+const ProductCard = ({ product, isAdmin, onEdit }) => {
+  const navigate = useNavigate();
+  
+  const handleEditClick = (e) => {
+    e.preventDefault();
+    onEdit(product);
+  };
+
   const salePercentage = product.oldPrice ? 
     Math.round(((product.oldPrice - product.currentPrice) / product.oldPrice) * 100) : 0;
 
@@ -28,8 +35,8 @@ const ProductCard = ({ product, isAdmin }) => {
   };
 
   return (
-    <Link to={`/products/${product._id}/${product.name}`} className={classes['product-link']}>
-      <div className={`${classes['product-card']} ${isAdmin ? classes['extra-height'] : ''}`}>
+    <div className={`${classes['product-card']} ${isAdmin ? classes['extra-height'] : ''}`}>
+      <Link to={`/products/${product._id}/${product.name}`} className={classes['product-link']}>
         <div className={classes['product-images']}>
           {/* Primary Media */}
           <div className={classes['first-image']}>
@@ -74,17 +81,17 @@ const ProductCard = ({ product, isAdmin }) => {
           <p className={classes['product-description']}>
             {product.description}
           </p>
-          {
-            isAdmin && (
-              <div className={classes['product-btns']}>
-                <Button className={classes['edit-btn']}>Edit</Button>
-                <Button className={classes['delete-btn']}>Delete</Button>
-              </div>
-            )
-          }
         </div>
-      </div>
-    </Link>
+      </Link>
+      {
+        isAdmin && (
+          <div className={classes['product-btns']}>
+            <Button className={classes['edit-btn']} onClick={handleEditClick}>Edit</Button>
+            <Button className={classes['delete-btn']}>Delete</Button>
+          </div>
+        )
+      }
+    </div>
   );
 };
 

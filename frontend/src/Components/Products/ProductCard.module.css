@@ -5,6 +5,7 @@
     max-width: 42rem;
     height: 88rem;
     background-color: rgba(237, 237, 237, 0.196);
+    position: relative;
 }
 .extra-height{
     height: 92rem !important;
@@ -105,7 +106,10 @@
 .product-btns{
     display: flex;
     gap: 2rem;
-    margin-top: 2rem;
+    margin-top: 1rem;
+    position: absolute;
+    bottom: 2.5rem;
+    left: 2rem;
 }
 .edit-btn, .delete-btn{
     font-size: 1.8rem;

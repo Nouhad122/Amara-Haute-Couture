@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import classes from './AddProductForm.module.css'
 import Button from '../SharedComps/Button'
 import { useMutation } from '@tanstack/react-query'
-import { addProduct, queryClient } from '../../util/http'
+import { addProduct, updateProduct, queryClient } from '../../util/http'
 
-const AddProductForm = () => {
+const AddProductForm = ({ editingProduct, onCancelEdit }) => {
   const availableSizes = ['XS', 'S', 'M', 'L', 'XL'];
   const [errors, setErrors] = useState({});
   const [selectedFiles, setSelectedFiles] = useState([]);
@@ -22,7 +22,58 @@ const AddProductForm = () => {
   
   const [formData, setFormData] = useState(initialFormState);
 
-  const { mutate, isLoading, error } = useMutation({
+  // Effect to update form when editingProduct changes
+  useEffect(() => {
+    if (editingProduct) {
+      // Update form data
+      setFormData({
+        name: editingProduct.name || '',
+        category: editingProduct.category || '',
+        description: editingProduct.description || '',
+        currentPrice: editingProduct.currentPrice || '',
+        oldPrice: editingProduct.oldPrice || '',
+        sizes: editingProduct.availableSizes || [], // Update to use availableSizes
+        bestSeller: editingProduct.bestSeller || false
+      });
+
+      // Handle media files
+      if (editingProduct.media && editingProduct.media.length > 0) {
+        // Create preview URLs for existing media
+        const urls = editingProduct.media.map(media => `http://localhost:3000${media.url}`);
+        setPreviewUrls(urls);
+
+        // Fetch the files from URLs and create File objects
+        Promise.all(
+          editingProduct.media.map(async (media) => {
+            try {
+              const response = await fetch(`http://localhost:3000${media.url}`);
+              const blob = await response.blob();
+              const fileName = media.url.split('/').pop();
+              const fileType = media.type === 'video' ? 'video/mp4' : 'image/jpeg';
+              return new File([blob], fileName, { type: fileType });
+            } catch (error) {
+              console.error('Error fetching media file:', error);
+              return null;
+            }
+          })
+        ).then(files => {
+          // Filter out any null values from failed fetches
+          const validFiles = files.filter(file => file !== null);
+          setSelectedFiles(validFiles);
+        });
+      } else {
+        setSelectedFiles([]);
+        setPreviewUrls([]);
+      }
+    } else {
+      // Reset form when not editing
+      setFormData(initialFormState);
+      setSelectedFiles([]);
+      setPreviewUrls([]);
+    }
+  }, [editingProduct]);
+
+  const addMutation = useMutation({
     mutationFn: async (data) => {
       try {
         const formDataToSend = new FormData();
@@ -34,9 +85,56 @@ const AddProductForm = () => {
         formDataToSend.append('currentPrice', Number(data.currentPrice).toString());
         formDataToSend.append('oldPrice', data.oldPrice ? Number(data.oldPrice).toString() : '0');
         
-        // Convert sizes array to JSON string and verify it's valid
+        // Convert sizes array to JSON string
         const sizesJson = JSON.stringify(data.sizes || []);
-        console.log('Sizes being sent:', sizesJson);
+        formDataToSend.append('availableSizes', sizesJson);
+        
+        formDataToSend.append('bestSeller', data.bestSeller.toString());
+        
+        // Append all files
+        if (selectedFiles.length > 0) {
+          selectedFiles.forEach(file => {
+            formDataToSend.append('files', file);
+          });
+        }
+        
+        return addProduct(formDataToSend);
+      } catch (err) {
+        console.error('Error preparing form data:', err);
+        throw err;
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['products'] });
+      // Reset form
+      setFormData(initialFormState);
+      setSelectedFiles([]);
+      setPreviewUrls([]);
+      setErrors({});
+    },
+    onError: (error) => {
+      console.error('Add mutation error:', error);
+      setErrors(prev => ({
+        ...prev,
+        submit: error.message || 'Failed to add product. Please try again.'
+      }));
+    }
+  });
+
+  const updateMutation = useMutation({
+    mutationFn: async (data) => {
+      try {
+        const formDataToSend = new FormData();
+        
+        // Append all form fields with proper type conversion
+        formDataToSend.append('name', data.name);
+        formDataToSend.append('category', data.category);
+        formDataToSend.append('description', data.description);
+        formDataToSend.append('currentPrice', Number(data.currentPrice).toString());
+        formDataToSend.append('oldPrice', data.oldPrice ? Number(data.oldPrice).toString() : '0');
+        
+        // Convert sizes array to JSON string
+        const sizesJson = JSON.stringify(data.sizes || []);
         formDataToSend.append('availableSizes', sizesJson);
         
         formDataToSend.append('bestSeller', data.bestSeller.toString());
@@ -48,13 +146,12 @@ const AddProductForm = () => {
           });
         }
 
-        // Debug log
-        console.log('Form data being sent:');
-        for (let [key, value] of formDataToSend.entries()) {
-          console.log(`${key}: ${value instanceof File ? value.name : value}`);
+        // Make sure we have a valid ID
+        if (!editingProduct?._id) {
+          throw new Error('Product ID is required for updating');
         }
         
-        return addProduct(formDataToSend);
+        return updateProduct(editingProduct._id, formDataToSend);
       } catch (err) {
         console.error('Error preparing form data:', err);
         throw err;
@@ -62,17 +159,18 @@ const AddProductForm = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['products'] });
-      // Reset form to initial state
+      // Reset form and exit edit mode
       setFormData(initialFormState);
       setSelectedFiles([]);
       setPreviewUrls([]);
       setErrors({});
+      onCancelEdit();
     },
     onError: (error) => {
-      console.error('Mutation error:', error);
+      console.error('Update mutation error:', error);
       setErrors(prev => ({
         ...prev,
-        submit: error.message || 'Failed to add product. Please try again.'
+        submit: error.message || 'Failed to update product. Please try again.'
       }));
     }
   });
@@ -155,7 +253,8 @@ const AddProductForm = () => {
       newErrors.oldPrice = 'Old price must be a positive number or empty';
     }
     
-    if (selectedFiles.length === 0) {
+    // Only require files if we're not editing or if we're editing and no files are selected
+    if (!editingProduct && selectedFiles.length === 0) {
       newErrors.files = 'At least one image or video is required';
     }
     
@@ -170,19 +269,23 @@ const AddProductForm = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (validateForm()) {
-      mutate(formData);
+      if (editingProduct) {
+        updateMutation.mutate(formData);
+      } else {
+        addMutation.mutate(formData);
+      }
     }
   };
 
   // Show loading state in the component render
-  if(isLoading) {
-    return <p>Adding product...</p>;
+  if(addMutation.isLoading || updateMutation.isLoading) {
+    return <p>{editingProduct ? 'Updating product...' : 'Adding product...'}</p>;
   }
 
   return (
     <div className={classes.container}>
       <form className={classes['product-form']} onSubmit={handleSubmit}>
-        <h2>Add New Product</h2>
+        <h2>{editingProduct ? 'Edit Product' : 'Add New Product'}</h2>
         
         <div className={classes['form-group']}>
           <label htmlFor="name">Product Name</label>
@@ -337,9 +440,27 @@ const AddProductForm = () => {
           </div>
         )}
         
-        <Button type="submit" className={classes['submit-btn']} disabled={isLoading}>
-          {isLoading ? 'Adding...' : 'Add Product'}
-        </Button>
+        <div className={classes['form-actions']}>
+          <Button 
+            type="submit" 
+            className={classes['submit-btn']} 
+            disabled={addMutation.isLoading || updateMutation.isLoading}
+          >
+            {addMutation.isLoading || updateMutation.isLoading ? 
+              (editingProduct ? 'Updating...' : 'Adding...') : 
+              (editingProduct ? 'Update Product' : 'Add Product')}
+          </Button>
+          
+          {editingProduct && (
+            <Button 
+              type="button" 
+              className={classes['cancel-btn']} 
+              onClick={onCancelEdit}
+            >
+              Cancel Edit
+            </Button>
+          )}
+        </div>
       </form>
     </div>
   )

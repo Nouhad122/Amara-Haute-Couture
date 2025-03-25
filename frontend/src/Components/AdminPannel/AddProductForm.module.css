@@ -208,3 +208,22 @@
   background-color: #ff4444;
   color: white;
 }
+
+.form-actions {
+  display: flex;
+  gap: 2rem;
+  justify-content: flex-start;
+  margin-top: 3rem;
+}
+
+.cancel-btn {
+  background-color: transparent;
+  border: 0.2rem solid var(--burgundy-text-color);
+  color: var(--burgundy-text-color);
+  transition: all 0.3s ease;
+}
+
+.cancel-btn:hover {
+  background-color: var(--burgundy-text-color);
+  color: white;
+}
