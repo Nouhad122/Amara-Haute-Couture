@@ -77,20 +77,20 @@
 }
 
 .confirm-btn:hover {
-    background-color: var(--dark-burgundy-text-color);
+    background-color: var(--burgundy-text-color) !important;
+    letter-spacing: 0.1rem !important;
 }
 
 .cancel-btn {
     background-color: transparent;
-    border: 2px solid var(--burgundy-text-color);
+    border: 1px solid var(--burgundy-text-color);
     color: var(--burgundy-text-color);
     padding: 1rem 3rem;
     font-size: 1.6rem;
 }
 
 .cancel-btn:hover {
-    background-color: var(--burgundy-text-color);
-    color: white;
+    letter-spacing: 0.1rem;
 }
 
 @keyframes fadeIn {

@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import { addProduct, updateProduct, queryClient } from '../../../../util/http';
+import { addProduct, updateProduct, queryClient } from '../util/http';
 
 export const useProductMutations = ({ onSuccess, onError, selectedFiles }) => {
   const createFormData = (data) => {

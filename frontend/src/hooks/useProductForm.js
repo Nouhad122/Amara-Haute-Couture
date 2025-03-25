@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { validateProduct } from '../utils/validation';
+import { validateProduct } from '../util/validation';
 
 const initialFormState = {
   name: '',

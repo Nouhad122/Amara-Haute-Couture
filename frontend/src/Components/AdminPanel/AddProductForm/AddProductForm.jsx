@@ -1,7 +1,7 @@
 import React from 'react';
 import classes from './AddProductForm.module.css';
-import { useProductForm } from './hooks/useProductForm';
-import { useProductMutations } from './hooks/useProductMutations';
+import { useProductForm } from '../../../hooks/useProductForm';
+import { useProductMutations } from '../../../hooks/useProductMutations';
 import TextInput from './components/FormInputs/TextInput';
 import TextAreaInput from './components/FormInputs/TextAreaInput';
 import NumberInput from './components/FormInputs/NumberInput';
