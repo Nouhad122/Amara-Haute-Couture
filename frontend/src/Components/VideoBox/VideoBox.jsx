@@ -20,7 +20,7 @@ const VideoBox = () => {
         <p className={classes.description}>
         Our bespoke tailoring and carefully selected fabrics ensure each piece is as unique as the woman who wears it.
         </p>
-        <Button pageUrl='products' linkButton>Explore Our Products</Button>
+        <Button pageUrl='shop' linkButton>Explore Our Products</Button>
       </div>
     </div>
   )

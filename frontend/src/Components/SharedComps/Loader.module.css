@@ -1,0 +1,45 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 50vh;
+  padding: 2rem;
+}
+
+.loader {
+  display: flex;
+  gap: 1rem;
+}
+
+.circle {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background-color: var(--burgundy-text-color);
+  animation: bounce 0.5s alternate infinite;
+}
+
+.circle:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.circle:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+.text {
+  margin-top: 2rem;
+  font-size: 2rem;
+  color: var(--burgundy-text-color);
+  font-family: var(--special-font-family);
+}
+
+@keyframes bounce {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-1rem);
+  }
+} 

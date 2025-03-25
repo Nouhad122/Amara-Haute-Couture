@@ -6,6 +6,9 @@ import SameCategory from '../Components/ProductDetails/SameCategory';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { fetchProduct } from '../util/http';
+import Loader from '../Components/SharedComps/Loader';
+import NotFound from './NotFound';
+
 const ProductDetails = () => {
   const { id } = useParams();
 
@@ -15,23 +18,26 @@ const ProductDetails = () => {
   });
 
   if(isLoading){
-    return <div>Loading...</div>;
+    return <Loader text="Loading product details..." />;
   }
 
   if(isError){
-    return <div>Error: {error.message}</div>;
+    return (
+      <div className={classes['error-container']}>
+        <p>Error: {error.message}</p>
+      </div>
+    );
   }
 
   if(!product){
-    return <div>Product not found</div>;
+    return <NotFound />;
   }
 
   return (
-    
     <>
       <section className={classes['product-details-section']}>
-          <Slider product={product} />
-          <Details product={product} />
+        <Slider product={product} />
+        <Details product={product} />
       </section>
       <SameCategory category={product.category} productId={product._id}/>
     </>

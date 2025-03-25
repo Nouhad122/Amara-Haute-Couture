@@ -10,7 +10,15 @@ const Details = ({product}) => {
       
       <div className={classes.price}>
         <span className={classes['price-amount']}>${product.currentPrice}</span>
-        <span className={classes['price-shipping']}>Shipping Included</span>
+        {
+          product.oldPrice && (
+            <span className={classes['old-price']}>${product.oldPrice}</span>
+        )}
+        {
+          product.bestSeller && (
+            <p className={classes['best-seller']}>Best Seller</p>
+          )
+        }  
       </div>
 
       <div className={classes.description}>

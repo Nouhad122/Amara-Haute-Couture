@@ -44,6 +44,14 @@ const productSchema = new mongoose.Schema({
     bestSeller: {
         type: Boolean,
         required: true,
+    },
+    material: {
+        type: String,
+        required: true,
+    },
+    careInstructions: {
+        type: String,
+        required: true,
     }
 });
 

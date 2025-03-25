@@ -252,6 +252,14 @@ const AddProductForm = ({ editingProduct, onCancelEdit }) => {
     if (formData.oldPrice && (isNaN(formData.oldPrice) || Number(formData.oldPrice) < 0)) {
       newErrors.oldPrice = 'Old price must be a positive number or empty';
     }
+
+    if (!formData.material.trim()) {
+      newErrors.material = 'Material is required';
+    }
+
+    if (!formData.careInstructions.trim()) {
+      newErrors.careInstructions = 'Care instructions are required';
+    }
     
     // Only require files if we're not editing or if we're editing and no files are selected
     if (!editingProduct && selectedFiles.length === 0) {
@@ -288,7 +296,7 @@ const AddProductForm = ({ editingProduct, onCancelEdit }) => {
         <h2>{editingProduct ? 'Edit Product' : 'Add New Product'}</h2>
         
         <div className={classes['form-group']}>
-          <label htmlFor="name">Product Name</label>
+          <label htmlFor="name">Product Name *</label>
           <input 
             type="text" 
             id="name" 
@@ -302,7 +310,7 @@ const AddProductForm = ({ editingProduct, onCancelEdit }) => {
         </div>
 
         <div className={classes['form-group']}>
-          <label htmlFor="category">Category</label>
+          <label htmlFor="category">Category *</label>
           <input 
             type="text" 
             id="category" 
@@ -317,7 +325,7 @@ const AddProductForm = ({ editingProduct, onCancelEdit }) => {
 
         
         <div className={classes['form-group']}>
-          <label htmlFor="description">Description</label>
+          <label htmlFor="description">Description *</label>
           <textarea 
             id="description" 
             name="description" 
@@ -332,7 +340,7 @@ const AddProductForm = ({ editingProduct, onCancelEdit }) => {
         
         <div className={classes['form-row']}>
           <div className={classes['form-group']}>
-            <label htmlFor="currentPrice">Current Price ($)</label>
+            <label htmlFor="currentPrice">Current Price ($) *</label>
             <input 
               type="number" 
               id="currentPrice" 
@@ -360,9 +368,38 @@ const AddProductForm = ({ editingProduct, onCancelEdit }) => {
             {errors.oldPrice && <p className={classes['error-message']}>{errors.oldPrice}</p>}
           </div>
         </div>
+
+        <div className={classes['form-row']}>
+          <div className={classes['form-group']}>
+            <label htmlFor="material">Material *</label>
+            <input 
+              type="text" 
+              id="material" 
+              name="material" 
+              value={formData.material}
+              onChange={handleChange}
+              placeholder="Enter material" 
+              className={errors.material ? classes['input-error'] : ''}
+            />
+            {errors.material && <p className={classes['error-message']}>{errors.material}</p>}
+          </div>
+          
+          <div className={classes['form-group']}>
+            <label htmlFor="careInstructions">Care Instructions *</label>
+            <input 
+              type="text" 
+              id="careInstructions" 
+              name="careInstructions" 
+              value={formData.careInstructions}
+              onChange={handleChange}   
+              placeholder="Enter care instructions" 
+            />
+            {errors.careInstructions && <p className={classes['error-message']}>{errors.careInstructions}</p>}
+          </div>
+        </div>
         
         <div className={classes['form-group']}>
-          <label htmlFor="files">Product Images & Videos</label>
+          <label htmlFor="files">Product Images & Videos *</label>
           <input 
             type="file"
             id="files"
@@ -404,7 +441,7 @@ const AddProductForm = ({ editingProduct, onCancelEdit }) => {
         </div>
         
         <div className={classes['form-group']}>
-          <label>Available Sizes</label>
+          <label>Available Sizes *</label>
           <div className={classes['sizes-group']}>
             {availableSizes.map((size) => (
               <div key={size} className={classes['size-checkbox']}>

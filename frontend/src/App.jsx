@@ -5,14 +5,16 @@ import Home from './Pages/Home';
 import Shop from './Pages/Shop';
 import ProductDetails from './Pages/ProductDetails';
 import AdminPannel from './Pages/AdminPannel';
+import NotFound from './Pages/NotFound';
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <RootPage />,
+    errorElement: <NotFound />,
     children: [
       { index: true, element: <Home /> },
-      { path: 'products', element: <Shop /> },
+      { path: 'shop', element: <Shop /> },
       { path: 'products/:id/:name', element: <ProductDetails /> },
       { path: 'admin', element: <AdminPannel /> }
     ]

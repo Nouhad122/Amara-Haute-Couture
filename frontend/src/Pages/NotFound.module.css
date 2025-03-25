@@ -1,0 +1,68 @@
+.container {
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+}
+
+.container h1 {
+  font-size: 12rem;
+  color: var(--burgundy-text-color);
+  font-family: var(--special-font-family);
+  margin-bottom: 1rem;
+}
+
+.container h2 {
+  font-size: 3.2rem;
+  color: var(--dark-grey-text-color);
+  margin-bottom: 2rem;
+}
+
+.container p {
+  font-size: 1.8rem;
+  color: var(--dark-grey-text-color);
+  margin-bottom: 3rem;
+  max-width: 60rem;
+}
+
+.actions {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.home-btn {
+  background-color: var(--burgundy-text-color);
+}
+
+.shop-btn {
+  background-color: var(--dark-grey-text-color);
+}
+.home-btn:hover, .shop-btn:hover {
+  letter-spacing: .1rem;
+}
+.home-btn:hover{
+  color: var(--burgundy-text-color);
+}
+.shop-btn:hover{
+  color: var(--dark-grey-text-color);
+  border: solid 1px var(--dark-grey-text-color);
+}
+
+@media (max-width: 768px) {
+  .container h1 {
+    font-size: 8rem;
+  }
+
+  .container h2 {
+    font-size: 2.4rem;
+  }
+
+  .container p {
+    font-size: 1.6rem;
+  }
+} 

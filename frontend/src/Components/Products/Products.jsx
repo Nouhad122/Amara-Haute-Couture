@@ -3,8 +3,9 @@ import classes from './Products.module.css';
 import ProductCard from './ProductCard';
 import usePagination from '../../hooks/usePagination';
 import Pagination from '../SharedComps/Pagination';
+import Loader from '../SharedComps/Loader';
 
-const Products = ({products, isLoading, isError, error, isAdmin, onEdit}) => {
+const Products = ({products, isLoading, isError, error, isAdmin, onEdit, onDelete}) => {
   const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = 15;
 
@@ -16,11 +17,7 @@ const Products = ({products, isLoading, isError, error, isAdmin, onEdit}) => {
   });
 
   if (isLoading) {
-    return (
-      <div className={classes['loading-container']}>
-        <p>Loading products...</p>
-      </div>
-    );
+    return <Loader text="Loading products..." />;
   }
 
   if (isError) {
@@ -48,6 +45,7 @@ const Products = ({products, isLoading, isError, error, isAdmin, onEdit}) => {
             product={product}
             isAdmin={isAdmin}
             onEdit={onEdit}
+            onDelete={onDelete}
           />
         ))}
       </section>

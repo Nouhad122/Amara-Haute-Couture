@@ -6,6 +6,21 @@
     align-items: center;
 }
 
+.error-container {
+    min-height: 50vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem;
+}
+
+.error-container p {
+    font-size: 2rem;
+    color: #dc3545;
+    font-family: var(--special-font-family);
+}
+
 @media (min-width: 768px){
     .product-details-section{
         flex-direction: row;

@@ -1,14 +1,26 @@
-import React from 'react';
+import React, { useState } from 'react';
 import classes from './ProductCard.module.css';
 import { Link, useNavigate } from 'react-router-dom';
 import Button from '../SharedComps/Button';
+import Modal from '../SharedComps/Modal';
 
-const ProductCard = ({ product, isAdmin, onEdit }) => {
+const ProductCard = ({ product, isAdmin, onEdit, onDelete }) => {
   const navigate = useNavigate();
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   
   const handleEditClick = (e) => {
     e.preventDefault();
     onEdit(product);
+  };
+
+  const handleDeleteClick = (e) => {
+    e.preventDefault();
+    setShowDeleteModal(true);
+  };
+
+  const handleConfirmDelete = () => {
+    onDelete(product._id);
+    setShowDeleteModal(false);
   };
 
   const salePercentage = product.oldPrice ? 
@@ -35,63 +47,75 @@ const ProductCard = ({ product, isAdmin, onEdit }) => {
   };
 
   return (
-    <div className={`${classes['product-card']} ${isAdmin ? classes['extra-height'] : ''}`}>
-      <Link to={`/products/${product._id}/${product.name}`} className={classes['product-link']}>
-        <div className={classes['product-images']}>
-          {/* Primary Media */}
-          <div className={classes['first-image']}>
-            {renderMedia(primaryMedia)}
-          </div>
-          
-          {/* Secondary Media (shown on hover) */}
-          <div className={classes['second-image']}>
-            {renderMedia(secondaryMedia)}
-          </div>
-          
-          {/* Media Indicators */}
-          {product.media.length > 2 && (
-            <div className={classes['media-indicators']}>
-              <span className={classes['more-media']}>
-                +{product.media.length - 2} more
-              </span>
+    <>
+      <div className={`${classes['product-card']} ${isAdmin ? classes['extra-height'] : ''}`}>
+        <Link to={`/products/${product._id}/${product.name}`} className={classes['product-link']}>
+          <div className={classes['product-images']}>
+            {/* Primary Media */}
+            <div className={classes['first-image']}>
+              {renderMedia(primaryMedia)}
             </div>
-          )}
-
-          {/* Sale Badge */}
-          {product.oldPrice && (
-            <span className={classes['sale']}>sale {salePercentage}%</span>
-          )}
-        </div>
-
-        <div className={classes['product-text']}>
-          <div className={classes['product-header']}>
-            <h1 className={classes['product-name']}>{product.name}</h1>
-            {product.bestSeller && (
-              <span className={classes['best-seller']}>Best Seller</span>
+            
+            {/* Secondary Media (shown on hover) */}
+            <div className={classes['second-image']}>
+              {renderMedia(secondaryMedia)}
+            </div>
+            
+            {/* Media Indicators */}
+            {product.media.length > 2 && (
+              <div className={classes['media-indicators']}>
+                <span className={classes['more-media']}>
+                  +{product.media.length - 2} more
+                </span>
+              </div>
             )}
-          </div>
-          <div className={classes['product-pricing']}>
-            <span className={classes['product-price']}>${product.currentPrice}</span>
+
+            {/* Sale Badge */}
             {product.oldPrice && (
-              <span className={`${classes['product-price']} ${classes['product-old-price']}`}>
-                ${product.oldPrice}
-              </span>
+              <span className={classes['sale']}>sale {salePercentage}%</span>
             )}
           </div>
-          <p className={classes['product-description']}>
-            {product.description}
-          </p>
-        </div>
-      </Link>
-      {
-        isAdmin && (
-          <div className={classes['product-btns']}>
-            <Button className={classes['edit-btn']} onClick={handleEditClick}>Edit</Button>
-            <Button className={classes['delete-btn']}>Delete</Button>
+
+          <div className={classes['product-text']}>
+            <div className={classes['product-header']}>
+              <h1 className={classes['product-name']}>{product.name}</h1>
+              {product.bestSeller && (
+                <span className={classes['best-seller']}>Best Seller</span>
+              )}
+            </div>
+            <div className={classes['product-pricing']}>
+              <span className={classes['product-price']}>${product.currentPrice}</span>
+              {product.oldPrice && (
+                <span className={`${classes['product-price']} ${classes['product-old-price']}`}>
+                  ${product.oldPrice}
+                </span>
+              )}
+            </div>
+            <p className={classes['product-description']}>
+              {product.description}
+            </p>
           </div>
-        )
-      }
-    </div>
+        </Link>
+        {
+          isAdmin && (
+            <div className={classes['product-btns']}>
+              <Button className={classes['edit-btn']} onClick={handleEditClick}>Edit</Button>
+              <Button className={classes['delete-btn']} onClick={handleDeleteClick}>Delete</Button>
+            </div>
+          )
+        }
+      </div>
+
+      <Modal
+        isOpen={showDeleteModal}
+        onClose={() => setShowDeleteModal(false)}
+        title="Delete Product"
+        message={`Are you sure you want to delete "${product.name}"? This action cannot be undone.`}
+        onConfirm={handleConfirmDelete}
+        confirmText="Delete"
+        cancelText="Cancel"
+      />
+    </>
   );
 };
 
