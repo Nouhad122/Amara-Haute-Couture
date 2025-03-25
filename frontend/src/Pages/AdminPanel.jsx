@@ -1,9 +1,9 @@
 import React, { useRef, useState } from 'react'
-import AddProductForm from '../Components/AdminPannel/AddProductForm'
-import AdminProducts from '../Components/AdminPannel/AdminProducts'
+import AddProductForm from '../Components/AdminPanel/AddProductForm/AddProductForm'
+import AdminProducts from '../Components/AdminPanel/AdminProducts/AdminProducts'
 import Title from '../Components/SharedComps/Title'
 
-const AdminPannel = () => {
+const AdminPanel = () => {
   const [editingProduct, setEditingProduct] = useState(null);
   const formRef = useRef(null);
 
@@ -32,4 +32,4 @@ const AdminPannel = () => {
   )
 }
 
-export default AdminPannel
+export default AdminPanel

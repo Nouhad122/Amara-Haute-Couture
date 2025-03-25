@@ -1,11 +1,13 @@
 import React, { useState } from 'react'
-import Products from '../Products/Products';
-import Title from '../SharedComps/Title';
+import Products from '../../Products/Products';
+import Title from '../../SharedComps/Title';
 import { useQuery, useMutation } from '@tanstack/react-query';
-import { fetchProducts, deleteProduct, queryClient } from '../../util/http';
-import Modal from '../SharedComps/Modal';
+import { fetchProducts, deleteProduct, queryClient } from '../../../util/http';
+import Modal from '../../SharedComps/Modal';
+import { useNavigate } from 'react-router-dom';
 
 const AdminProducts = ({ onEdit }) => {
+  const navigate = useNavigate();
   const [errorModal, setErrorModal] = useState({ show: false, message: '' });
 
   const { data: products, isLoading, isError, error } = useQuery({
@@ -30,6 +32,7 @@ const AdminProducts = ({ onEdit }) => {
   const handleDelete = async (productId) => {
     try {
       await deleteMutation.mutateAsync(productId);
+      navigate('/admin');
     } catch (error) {
       // Error is handled in the mutation's onError
     }

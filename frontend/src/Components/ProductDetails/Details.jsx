@@ -22,7 +22,7 @@ const Details = ({product}) => {
       </div>
 
       <div className={classes.description}>
-        <h2>About this {product.category}</h2>
+        <h2>About {product.name}</h2>
         <p>
           {product.description}
         </p>
@@ -42,11 +42,11 @@ const Details = ({product}) => {
       <div className={classes.additional}>
         <div className={classes['info-item']}>
           <h3>Material</h3>
-          <p>100% Premium Silk</p>
+          <p>{product.material}</p>
         </div>
         <div className={classes['info-item']}>
           <h3>Care Instructions</h3>
-          <p>Dry Clean Only</p>
+          <p>{product.careInstructions}</p>
         </div>
       </div>
     </div>

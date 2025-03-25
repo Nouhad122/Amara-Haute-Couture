@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { FaChevronCircleLeft, FaChevronCircleRight, FaPlay, FaSearchPlus, FaSearchMinus } from "react-icons/fa";
 import classes from './Slider.module.css';
 
@@ -11,6 +11,7 @@ const Slider = ({product}) => {
   
   const videoRef = useRef(null);
   const imageRef = useRef(null);
+  const thumbnailVideoRefs = useRef([]); // Add missing ref for thumbnail videos
 
   // Map product media to slides format
   const slides = product.media.map((media, index) => ({

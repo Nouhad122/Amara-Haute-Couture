@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import classes from './ProductCard.module.css';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Button from '../SharedComps/Button';
 import Modal from '../SharedComps/Modal';
 
 const ProductCard = ({ product, isAdmin, onEdit, onDelete }) => {
-  const navigate = useNavigate();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   
   const handleEditClick = (e) => {
@@ -49,7 +48,7 @@ const ProductCard = ({ product, isAdmin, onEdit, onDelete }) => {
   return (
     <>
       <div className={`${classes['product-card']} ${isAdmin ? classes['extra-height'] : ''}`}>
-        <Link to={`/products/${product._id}/${product.name}`} className={classes['product-link']}>
+        <Link to={`/shop/${product._id}/${product.name}`} className={classes['product-link']}>
           <div className={classes['product-images']}>
             {/* Primary Media */}
             <div className={classes['first-image']}>
@@ -60,18 +59,9 @@ const ProductCard = ({ product, isAdmin, onEdit, onDelete }) => {
             <div className={classes['second-image']}>
               {renderMedia(secondaryMedia)}
             </div>
-            
-            {/* Media Indicators */}
-            {product.media.length > 2 && (
-              <div className={classes['media-indicators']}>
-                <span className={classes['more-media']}>
-                  +{product.media.length - 2} more
-                </span>
-              </div>
-            )}
 
             {/* Sale Badge */}
-            {product.oldPrice && (
+            {product.oldPrice > 0 && (
               <span className={classes['sale']}>sale {salePercentage}%</span>
             )}
           </div>
@@ -85,7 +75,7 @@ const ProductCard = ({ product, isAdmin, onEdit, onDelete }) => {
             </div>
             <div className={classes['product-pricing']}>
               <span className={classes['product-price']}>${product.currentPrice}</span>
-              {product.oldPrice && (
+              {product.oldPrice > 0 && (
                 <span className={`${classes['product-price']} ${classes['product-old-price']}`}>
                   ${product.oldPrice}
                 </span>

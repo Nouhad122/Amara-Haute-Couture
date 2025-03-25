@@ -6,11 +6,17 @@ import Button from './Button';
 const Modal = ({ isOpen, onClose, title, message, onConfirm, confirmText, cancelText }) => {
   const [modalRoot, setModalRoot] = useState(null);
 
+  // Effect to create or find modal root when modal is open
   useEffect(() => {
-    // Try to find existing modal root
+    if (!isOpen) {
+      // Don't create DOM elements if modal isn't visible
+      setModalRoot(null);
+      return;
+    }
+
+    // Find or create modal root
     let element = document.getElementById('modal-root');
     
-    // If it doesn't exist, create it
     if (!element) {
       element = document.createElement('div');
       element.id = 'modal-root';
@@ -18,15 +24,9 @@ const Modal = ({ isOpen, onClose, title, message, onConfirm, confirmText, cancel
     }
     
     setModalRoot(element);
+  }, [isOpen]);
 
-    // Cleanup on unmount
-    return () => {
-      if (element.parentElement && !element.childNodes.length) {
-        element.parentElement.removeChild(element);
-      }
-    };
-  }, []);
-
+  // If modal is closed or root element isn't available, don't render
   if (!isOpen || !modalRoot) return null;
 
   return ReactDOM.createPortal(
@@ -42,7 +42,7 @@ const Modal = ({ isOpen, onClose, title, message, onConfirm, confirmText, cancel
         </div>
         <div className={classes.actions}>
           {onConfirm && (
-            <Button 
+            <Button
               onClick={onConfirm}
               className={classes['confirm-btn']}
             >
@@ -62,4 +62,4 @@ const Modal = ({ isOpen, onClose, title, message, onConfirm, confirmText, cancel
   );
 };
 
-export default Modal; 
+export default Modal;

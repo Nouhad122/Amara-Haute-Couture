@@ -54,7 +54,9 @@ exports.createProduct = async (req, res) => {
             oldPrice: req.body.oldPrice ? Number(req.body.oldPrice) : undefined,
             media: mediaFiles,
             availableSizes: availableSizes,
-            bestSeller: req.body.bestSeller === 'true'
+            bestSeller: req.body.bestSeller === 'true',
+            material: req.body.material,
+            careInstructions: req.body.careInstructions
         };
 
         const product = new Product(productData);
@@ -111,6 +113,12 @@ exports.updateProduct = async (req, res) => {
         }
         if (req.body.bestSeller) {
             req.body.bestSeller = req.body.bestSeller === 'true';
+        }
+        if (req.body.material) {
+            req.body.material = req.body.material.trim();
+        }
+        if (req.body.careInstructions) {
+            req.body.careInstructions = req.body.careInstructions.trim();
         }
 
         Object.assign(product, req.body);
