@@ -11,6 +11,11 @@ const VideoBox = () => {
         autoPlay 
         muted 
         loop
+        playsInline
+        disablePictureInPicture
+        disableRemotePlayback
+        controlsList="nodownload nofullscreen noremoteplayback"
+        controls={false}
       >
         <source src={videoInBox} type="video/mp4" />
       </video>
