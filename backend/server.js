@@ -20,9 +20,8 @@ server.use(express.json());
 // Enhanced CORS configuration for Vercel deployment
 const allowedOrigins = [
   FRONTEND_URL,
-  'https://frontend-gamma-one-47.vercel.app', 
-  'https://frontend-8iud4pus4-nouhad122s-projects.vercel.app',
-  // Add any other Vercel frontend URLs you might use
+  'https://amara-haute-couture.vercel.app', 
+  'https://amara-haute-couture-jw7eak8aw-nouhad122s-projects.vercel.app',
 ];
 
 server.use(cors({
