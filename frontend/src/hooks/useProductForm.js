@@ -35,15 +35,18 @@ export const useProductForm = (editingProduct) => {
 
       // Handle existing media files
       if (editingProduct.media && editingProduct.media.length > 0) {
+        // Get the backend URL from environment variables
+        const BASE_URL = import.meta.env.VITE_REACT_APP_BACKEND_BASEURL;
+        
         // Create preview URLs for existing media
-        const urls = editingProduct.media.map(media => `http://localhost:3000${media.url}`);
+        const urls = editingProduct.media.map(media => `${BASE_URL}${media.url}`);
         setPreviewUrls(urls);
 
         // Fetch the files from URLs and create File objects
         Promise.all(
           editingProduct.media.map(async (media) => {
             try {
-              const response = await fetch(`http://localhost:3000${media.url}`);
+              const response = await fetch(`${BASE_URL}${media.url}`);
               const blob = await response.blob();
               const fileName = media.url.split('/').pop();
               const fileType = media.type === 'video' ? 'video/mp4' : 'image/jpeg';

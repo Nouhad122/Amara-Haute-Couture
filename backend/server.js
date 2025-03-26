@@ -2,8 +2,14 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
+const dotenv = require('dotenv');
 const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
+
+// Load environment variables
+dotenv.config();
+
+const PORT = process.env.PORT || 3000;
 
 const server = express();
 server.use(express.json());
@@ -18,12 +24,15 @@ server.use('/admin', adminRoutes);
 // Shop routes for customer-facing operations
 server.use('/shop', shopRoutes);
 
-mongoose.connect('mongodb+srv://nouhadalhallab122:U30eYfNYXwRZJQGz@amara-cluster.wqmrg.mongodb.net/shop?retryWrites=true&w=majority&appName=Amara-Cluster')
-.then(() =>{
-    server.listen(3000);
+mongoose.connect(process.env.MONGODB_URI)
+.then(() => {
+    console.log('Connected to MongoDB');
+    server.listen(PORT, () => {
+        console.log(`Server running on port ${PORT}`);
+    });
 })
-.catch((err) =>{
-    console.log(err);
+.catch((err) => {
+    console.error('Error connecting to MongoDB:', err);
 });
 
 

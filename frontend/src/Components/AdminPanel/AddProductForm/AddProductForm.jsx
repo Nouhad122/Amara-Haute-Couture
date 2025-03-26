@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import classes from './AddProductForm.module.css';
 import { useProductForm } from '../../../hooks/useProductForm';
 import { useProductMutations } from '../../../hooks/useProductMutations';
@@ -12,6 +12,9 @@ import SingleCheckbox from './components/FormInputs/SingleCheckbox';
 import FormActions from './components/FormActions';
 
 const AddProductForm = ({ editingProduct, onCancelEdit }) => {
+  // Create a ref for the file input
+  const fileInputRef = useRef(null);
+  
   // Use the custom hook for form state management
   const {
     formData,
@@ -30,6 +33,10 @@ const AddProductForm = ({ editingProduct, onCancelEdit }) => {
   const { addMutation, updateMutation } = useProductMutations({
     onSuccess: () => {
       resetForm();
+      // Reset the file input to clear "No file chosen" text
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
       if (editingProduct) onCancelEdit();
     },
     onError: (error) => {
@@ -182,6 +189,7 @@ const AddProductForm = ({ editingProduct, onCancelEdit }) => {
           onChange={handleFileChange}
           error={errors.files}
           required={!editingProduct}
+          ref={fileInputRef}
         />
 
         {selectedFiles.length > 0 && (
