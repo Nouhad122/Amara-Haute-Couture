@@ -35,12 +35,27 @@ const ProductCard = ({ product, isAdmin, onEdit, onDelete }) => {
 
   const renderMedia = (media) => {
     if (!media) return null;
-    const url = `http://localhost:3000${media.url}`;
+    
+    // Check if the URL is already an absolute URL (starts with http:// or https://)
+    const isAbsoluteUrl = media.url.startsWith('http://') || media.url.startsWith('https://');
+    
+    // If it's an absolute URL (like Cloudinary), use it directly
+    // Otherwise, prefix with backend URL for relative paths
+    const url = isAbsoluteUrl 
+      ? media.url 
+      : `${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}${media.url}`;
+    
     return (
       <img 
         className={classes['media-item']}
         src={url}
         alt={product.name}
+        loading="lazy"
+        onError={(e) => {
+          console.error('Image failed to load:', url);
+          e.target.onerror = null; 
+          e.target.src = 'https://via.placeholder.com/300x400?text=Image+Not+Found';
+        }}
       />
     );
   };
