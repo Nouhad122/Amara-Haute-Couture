@@ -2,7 +2,7 @@ import { QueryClient } from '@tanstack/react-query';
 
 export const queryClient = new QueryClient();
 
-const BASE_URL = 'http://localhost:3000';
+const BASE_URL = import.meta.env.VITE_REACT_APP_BACKEND_BASEURL || 'http://localhost:3000';
 
 export const fetchProducts = async () => {
     try {
