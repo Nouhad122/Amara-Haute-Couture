@@ -11,13 +11,25 @@ export const useSlider = (product) => {
   const imageRef = useRef(null);
   const thumbnailVideoRefs = useRef([]);
 
+  // Function to format the URL correctly
+  const formatUrl = (url) => {
+    // Check if the URL is already an absolute URL (starts with http:// or https://)
+    const isAbsoluteUrl = url.startsWith('http://') || url.startsWith('https://');
+    
+    // If it's an absolute URL (like Cloudinary), use it directly
+    // Otherwise, prefix with backend URL for relative paths
+    return isAbsoluteUrl 
+      ? url 
+      : `${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}${url}`;
+  };
+
   // Map product media to slides format
   const slides = product.media.map((media, index) => ({
     id: index + 1,
     type: media.type,
-    src: `http://localhost:3000${media.url}`,
+    src: formatUrl(media.url),
     alt: `${product.name} - View ${index + 1}`,
-    thumbnail: `http://localhost:3000${media.url}`
+    thumbnail: formatUrl(media.url)
   }));
 
   const nextSlide = () => {
