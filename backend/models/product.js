@@ -9,6 +9,14 @@ const mediaSchema = new mongoose.Schema({
         type: String,
         required: true,
         enum: ['image', 'video']
+    },
+    publicId: {
+        type: String,
+        // Required for Cloudinary images, not for older records
+    },
+    filename: {
+        type: String,
+        // Not required for backward compatibility with existing data
     }
 });
 

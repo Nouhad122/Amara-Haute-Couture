@@ -1,6 +1,8 @@
 const Product = require('../models/product');
 const fs = require('fs');
 const path = require('path');
+const { getFileUrl, getFilePath, isVercel } = require('../utils/uploadHandler');
+const { uploadMultipleToCloudinary, deleteFromCloudinary } = require('../utils/cloudinary');
 
 exports.getProducts = async (req, res) => {
     try {
@@ -41,9 +43,14 @@ exports.createProduct = async (req, res) => {
             return res.status(400).json({ message: 'Invalid sizes format' });
         }
 
-        const mediaFiles = files.map(file => ({
-            url: `/uploads/${file.filename}`,
-            type: file.mimetype.startsWith('image/') ? 'image' : 'video'
+        // Upload files to Cloudinary
+        const cloudinaryResults = await uploadMultipleToCloudinary(files);
+        
+        // Create media files array from Cloudinary results
+        const mediaFiles = cloudinaryResults.map(result => ({
+            url: result.secure_url,
+            publicId: result.public_id,
+            type: result.resource_type === 'image' ? 'image' : 'video'
         }));
 
         const productData = {
@@ -62,16 +69,30 @@ exports.createProduct = async (req, res) => {
         const product = new Product(productData);
         const newProduct = await product.save();
         
+        // Clean up local temporary files
+        files.forEach(file => {
+            try {
+                fs.unlinkSync(file.path);
+            } catch (err) {
+                console.error('Error deleting temporary file:', err);
+            }
+        });
+        
         res.status(201).json(newProduct);
     } catch (error) {
-        // Delete uploaded files if product creation fails
+        console.error('Product creation error:', error);
+        
+        // Clean up local temporary files on error
         if (req.files) {
             req.files.forEach(file => {
-                fs.unlink(file.path, (err) => {
-                    if (err) console.error('Error deleting file:', err);
-                });
+                try {
+                    fs.unlinkSync(file.path);
+                } catch (err) {
+                    console.error('Error deleting temporary file:', err);
+                }
             });
         }
+        
         res.status(400).json({ message: error.message });
     }
 }
@@ -85,20 +106,38 @@ exports.updateProduct = async (req, res) => {
 
         // Handle new files if uploaded
         if (req.files && req.files.length > 0) {
-            const newMediaFiles = req.files.map(file => ({
-                url: `/uploads/${file.filename}`,
-                type: file.mimetype.startsWith('image/') ? 'image' : 'video'
+            // Upload new files to Cloudinary
+            const cloudinaryResults = await uploadMultipleToCloudinary(req.files);
+            
+            // Create media files array from Cloudinary results
+            const newMediaFiles = cloudinaryResults.map(result => ({
+                url: result.secure_url,
+                publicId: result.public_id,
+                type: result.resource_type === 'image' ? 'image' : 'video'
             }));
             
-            // Delete old files
-            product.media.forEach(media => {
-                const filePath = path.join(__dirname, '..', media.url);
-                fs.unlink(filePath, (err) => {
-                    if (err) console.error('Error deleting old file:', err);
-                });
-            });
+            // Delete old files from Cloudinary
+            for (const media of product.media) {
+                if (media.publicId) {
+                    try {
+                        await deleteFromCloudinary(media.publicId);
+                    } catch (err) {
+                        console.error('Error deleting file from Cloudinary:', err);
+                    }
+                }
+            }
             
+            // Update product with new media files
             req.body.media = newMediaFiles;
+            
+            // Clean up local temporary files
+            req.files.forEach(file => {
+                try {
+                    fs.unlinkSync(file.path);
+                } catch (err) {
+                    console.error('Error deleting temporary file:', err);
+                }
+            });
         }
 
         // Update other fields
@@ -125,14 +164,19 @@ exports.updateProduct = async (req, res) => {
         const updatedProduct = await product.save();
         res.json(updatedProduct);
     } catch (error) {
-        // Delete newly uploaded files if update fails
+        console.error('Product update error:', error);
+        
+        // Clean up local temporary files on error
         if (req.files) {
             req.files.forEach(file => {
-                fs.unlink(file.path, (err) => {
-                    if (err) console.error('Error deleting file:', err);
-                });
+                try {
+                    fs.unlinkSync(file.path);
+                } catch (err) {
+                    console.error('Error deleting temporary file:', err);
+                }
             });
         }
+        
         res.status(400).json({ message: error.message });
     }
 }
@@ -144,17 +188,21 @@ exports.deleteProduct = async (req, res) => {
             return res.status(404).json({ message: 'Product not found' });
         }
 
-        // Delete associated files
-        product.media.forEach(media => {
-            const filePath = path.join(__dirname, '..', media.url);
-            fs.unlink(filePath, (err) => {
-                if (err) console.error('Error deleting file:', err);
-            });
-        });
+        // Delete files from Cloudinary
+        for (const media of product.media) {
+            if (media.publicId) {
+                try {
+                    await deleteFromCloudinary(media.publicId);
+                } catch (err) {
+                    console.error('Error deleting file from Cloudinary:', err);
+                }
+            }
+        }
 
         await product.deleteOne();
         res.json({ message: 'Product deleted' });
     } catch (error) {
+        console.error('Product deletion error:', error);
         res.status(500).json({ message: error.message });
     }
 }
