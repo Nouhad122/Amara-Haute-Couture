@@ -1,11 +1,15 @@
 import './App.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { lazy, Suspense } from 'react';
 import RootPage from './Pages/RootPage';
-import Home from './Pages/Home';
-import Shop from './Pages/Shop';
-import ProductDetails from './Pages/ProductDetails';
-import AdminPanel from './Pages/AdminPanel';
 import NotFound from './Pages/NotFound';
+import Loader from './Components/SharedComps/Loader';
+
+// Lazy loaded components
+const Home = lazy(() => import('./Pages/Home'));
+const Shop = lazy(() => import('./Pages/Shop'));
+const ProductDetails = lazy(() => import('./Pages/ProductDetails'));
+const AdminPanel = lazy(() => import('./Pages/AdminPanel'));
 
 const router = createBrowserRouter([
   {
@@ -13,10 +17,38 @@ const router = createBrowserRouter([
     element: <RootPage />,
     errorElement: <NotFound />,
     children: [
-      { index: true, element: <Home /> },
-      { path: 'shop', element: <Shop /> },
-      { path: 'shop/:id/:name', element: <ProductDetails /> },
-      { path: 'admin', element: <AdminPanel /> }
+      { 
+        index: true, 
+        element: (
+          <Suspense fallback={<Loader />}>
+            <Home />
+          </Suspense>
+        ) 
+      },
+      { 
+        path: 'shop', 
+        element: (
+          <Suspense fallback={<Loader />}>
+            <Shop />
+          </Suspense>
+        ) 
+      },
+      { 
+        path: 'shop/:id/:name', 
+        element: (
+          <Suspense fallback={<Loader />}>
+            <ProductDetails />
+          </Suspense>
+        ) 
+      },
+      { 
+        path: 'admin', 
+        element: (
+          <Suspense fallback={<Loader />}>
+            <AdminPanel />
+          </Suspense>
+        ) 
+      }
     ]
   }
 ]);

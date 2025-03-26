@@ -18,14 +18,14 @@ const Shop = () => {
 
 
   return (
-    <>
+    <div className="extra-margin">
       <Title title="Our Products" subtitle="Discover the art of our designs"/>
       <Products 
        products={products} 
        isLoading={isLoading} 
        isError={isError} 
        error={error} />
-      </>
+    </div>
     
   )
 }

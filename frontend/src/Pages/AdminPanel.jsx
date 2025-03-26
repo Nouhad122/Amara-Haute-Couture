@@ -17,7 +17,7 @@ const AdminPanel = () => {
   };
 
   return (
-    <div>
+    <div className="extra-margin">
       <Title
         title="Admin Pannel"
         subtitle="Only admins can add, edit and delete all products"/>

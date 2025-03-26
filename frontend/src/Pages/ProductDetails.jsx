@@ -34,13 +34,13 @@ const ProductDetails = () => {
   }
 
   return (
-    <>
+    <div className="extra-margin">
       <section className={classes['product-details-section']}>
         <Slider product={product} />
         <Details product={product} />
       </section>
       <SameCategory category={product.category} productId={product._id}/>
-    </>
+    </div>
   )
 }
 

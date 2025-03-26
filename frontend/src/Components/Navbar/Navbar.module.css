@@ -5,6 +5,11 @@
     justify-content: center;
     background-color: var(--warm-pink-text-color);
     height: 10rem;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
   }
   .navbar-links {
     display: flex;

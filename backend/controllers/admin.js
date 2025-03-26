@@ -1,7 +1,6 @@
 const Product = require('../models/product');
 const fs = require('fs');
 const path = require('path');
-const { getFilePath, getFileUrl, isVercel } = require('../utils/uploadHandler');
 
 exports.getProducts = async (req, res) => {
     try {
@@ -42,9 +41,8 @@ exports.createProduct = async (req, res) => {
             return res.status(400).json({ message: 'Invalid sizes format' });
         }
 
-        // Process files using the new handler
         const mediaFiles = files.map(file => ({
-            url: getFileUrl(file.filename),
+            url: `/uploads/${file.filename}`,
             type: file.mimetype.startsWith('image/') ? 'image' : 'video'
         }));
 
@@ -69,8 +67,7 @@ exports.createProduct = async (req, res) => {
         // Delete uploaded files if product creation fails
         if (req.files) {
             req.files.forEach(file => {
-                const filePath = getFilePath(file.filename);
-                fs.unlink(filePath, (err) => {
+                fs.unlink(file.path, (err) => {
                     if (err) console.error('Error deleting file:', err);
                 });
             });
@@ -89,20 +86,17 @@ exports.updateProduct = async (req, res) => {
         // Handle new files if uploaded
         if (req.files && req.files.length > 0) {
             const newMediaFiles = req.files.map(file => ({
-                url: getFileUrl(file.filename),
+                url: `/uploads/${file.filename}`,
                 type: file.mimetype.startsWith('image/') ? 'image' : 'video'
             }));
             
-            // In non-Vercel environments, try to delete old files
-            if (!isVercel) {
-                product.media.forEach(media => {
-                    const filename = media.url.split('/').pop();
-                    const filePath = getFilePath(filename);
-                    fs.unlink(filePath, (err) => {
-                        if (err) console.error('Error deleting old file:', err);
-                    });
+            // Delete old files
+            product.media.forEach(media => {
+                const filePath = path.join(__dirname, '..', media.url);
+                fs.unlink(filePath, (err) => {
+                    if (err) console.error('Error deleting old file:', err);
                 });
-            }
+            });
             
             req.body.media = newMediaFiles;
         }
@@ -134,8 +128,7 @@ exports.updateProduct = async (req, res) => {
         // Delete newly uploaded files if update fails
         if (req.files) {
             req.files.forEach(file => {
-                const filePath = getFilePath(file.filename);
-                fs.unlink(filePath, (err) => {
+                fs.unlink(file.path, (err) => {
                     if (err) console.error('Error deleting file:', err);
                 });
             });
@@ -151,16 +144,13 @@ exports.deleteProduct = async (req, res) => {
             return res.status(404).json({ message: 'Product not found' });
         }
 
-        // Delete associated files in non-Vercel environments
-        if (!isVercel) {
-            product.media.forEach(media => {
-                const filename = media.url.split('/').pop();
-                const filePath = getFilePath(filename);
-                fs.unlink(filePath, (err) => {
-                    if (err) console.error('Error deleting file:', err);
-                });
+        // Delete associated files
+        product.media.forEach(media => {
+            const filePath = path.join(__dirname, '..', media.url);
+            fs.unlink(filePath, (err) => {
+                if (err) console.error('Error deleting file:', err);
             });
-        }
+        });
 
         await product.deleteOne();
         res.json({ message: 'Product deleted' });

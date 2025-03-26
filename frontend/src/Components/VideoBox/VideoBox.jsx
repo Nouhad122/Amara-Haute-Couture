@@ -1,6 +1,6 @@
 import React from 'react';
 import classes from './VideoBox.module.css';
-import trailerVideo from '../../assets/trailer_G.mp4';
+import videoInBox from '../../assets/video-in-box.mp4';
 import Button from '../SharedComps/Button';
 
 const VideoBox = () => {
@@ -12,7 +12,7 @@ const VideoBox = () => {
         muted 
         loop
       >
-        <source src={trailerVideo} type="video/mp4" />
+        <source src={videoInBox} type="video/mp4" />
       </video>
       
       <div className={classes.contentOverlay}>

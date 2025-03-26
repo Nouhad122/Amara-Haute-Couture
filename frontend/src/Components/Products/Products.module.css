@@ -8,8 +8,10 @@
 .loading-container,
 .error-container,
 .no-products {
-  text-align: center;
-  padding: 4rem;
+  height: calc(100vh - 23rem);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 2rem;
   color: #333;
 }
