@@ -14,7 +14,7 @@ const Footer = () => {
         <div className={classes.text}>
           <p className={classes.brand}>@Amara Haute Couture</p>
           <p className={classes.description}>
-            Crafted with passion by Mariam El Hallab, bringing elegant and timeless designs to life.
+            Crafted with passion by Maryam El Hallab, bringing elegant and timeless designs to life.
           </p>
           <p className={classes.copyright}>
             &copy; {currentYear} All rights reserved
