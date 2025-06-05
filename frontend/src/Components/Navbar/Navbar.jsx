@@ -14,11 +14,11 @@ const Navbar = () => {
       />
       </NavLink>
 
-      <div className={classes['navbar-links']}> 
+      {/* <div className={classes['navbar-links']}> 
         <NavLink to={`/admin`}>
           <button className={classes['link-btn']}>Admin Pannel</button>
         </NavLink>
-      </div>
+      </div> */}
     </nav>
   )
 }

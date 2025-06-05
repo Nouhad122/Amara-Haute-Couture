@@ -41,14 +41,14 @@ const router = createBrowserRouter([
           </Suspense>
         ) 
       },
-      { 
-        path: 'admin', 
-        element: (
-          <Suspense fallback={<Loader />}>
-            <AdminPanel />
-          </Suspense>
-        ) 
-      }
+      // { 
+      //   path: 'admin', 
+      //   element: (
+      //     <Suspense fallback={<Loader />}>
+      //       <AdminPanel />
+      //     </Suspense>
+      //   ) 
+      // }
     ]
   }
 ]);
